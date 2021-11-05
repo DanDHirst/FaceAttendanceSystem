@@ -1,0 +1,11 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<h1>index page</h1>
+<form asp-action="Details">
+    <img height ="300" width ="600" src="./image/newPhoto.jpg" alt="This is where you upload a photo" />
+    <a asp-area="" asp-controller="FaceRecognition" asp-action="UploadNewPhoto">Click to add a photo</a>
+    <button>click to compare</button>
+</form>

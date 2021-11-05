@@ -1,0 +1,41 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model FaceAttendance.Models.UserList
+@{
+}
+<a  asp-area="" asp-controller="Users" asp-action="Create">create user</a>
+<h1>Index</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.userList[0].Name)
+            </th>
+            <th>
+                Image
+                @Html.DisplayNameFor(model => model.userList[0].Url)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.userList)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => user.Name)
+                </td>
+                <td>
+                    <img height=" 100" width="100" src ="@Html.DisplayFor(modelItem => user.Url)"/>
+                    
+                </td>
+
+                <td>
+                    @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
+                    <a asp-action="Delete" asp-route-id="@user.Name">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
