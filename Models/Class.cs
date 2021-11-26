@@ -8,7 +8,7 @@ namespace FaceAttendance.Models
     public class Class
     {
         public int ID { get; set; }
-        public int ClassID { get; set; }
+        public int ClassCode { get; set; }
         public int ModuleID { get; set; }
         public int LecturerID { get; set; }
 

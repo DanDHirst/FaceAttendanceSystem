@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace FaceAttendance.Models
 {
-    public class CourseList
+    public class RegisteredStudent
     {
         public int ID { get; set; }
-        
         public int StudentID { get; set; }
-        public int CourseID { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-
+        public int ClassID { get; set; }
+        public DateTime RegisteredTime { get; set; }
+        public Class Class { get; set; }
         public Student Student { get; set; }
-        public Course Course { get; set; }
     }
 }

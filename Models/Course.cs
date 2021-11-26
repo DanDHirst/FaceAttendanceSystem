@@ -8,7 +8,7 @@ namespace FaceAttendance.Models
     public class Course
     {
         public int ID { get; set; }
-        public int CourseID { get; set; }
+        public int CourseCode { get; set; }
         public string CourseName { get; set; }
 
     }

@@ -8,7 +8,6 @@ namespace FaceAttendance.Models
     public class LecturerList
     {
         public int ID { get; set; }
-        public int LecturerListID { get; set; }
 
         public int ModuleID { get; set; }
 
