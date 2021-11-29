@@ -24,7 +24,7 @@ namespace FaceAttendance.Controllers
             _context = context;
             Environment = _environment;
         }
-       
+
 
         // GET: Students
         public async Task<IActionResult> Index()
@@ -63,12 +63,20 @@ namespace FaceAttendance.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,StudentCode,StudentName,imageUrl,active")] Student student, List<IFormFile> postedFiles)
         {
+            if (ModelState.IsValid == false)
+            {
+                return View(student);
+            }
+            _context.Add(student);
+            await _context.SaveChangesAsync();
+
+
 
             string wwwPath = this.Environment.WebRootPath;
             string contentPath = this.Environment.ContentRootPath;
 
             string path = Path.Combine(this.Environment.WebRootPath, "image");
-            string fileName = student.StudentCode.ToString() + ".jpg";   //Path.GetFileName(postedFile.FileName);
+            string fileName = student.ID.ToString() + ".jpg";   //Path.GetFileName(postedFile.FileName);
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -77,7 +85,7 @@ namespace FaceAttendance.Controllers
             List<string> uploadedFiles = new List<string>();
             foreach (IFormFile postedFile in postedFiles)
             {
-                
+
 
                 using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
                 {
@@ -86,16 +94,16 @@ namespace FaceAttendance.Controllers
                     ViewBag.Message += string.Format("<b>{0}</b> uploaded.<br />", fileName);
                 }
                 BlobStorage.UploadAFile("images", fileName);
-                System.IO.File.Delete(("./wwwroot/image/" + postedFile.FileName));
+                System.IO.File.Delete(("./wwwroot/image/" + fileName));
             }
             student.imageUrl = Constants.IMAGE_BASE_URL + fileName;
-            if (ModelState.IsValid)
-            {
-                _context.Add(student);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(student);
+
+            await _context.SaveChangesAsync();
+
+            
+            return RedirectToAction(nameof(Index));
+
+
         }
 
         // GET: Students/Edit/5
@@ -119,7 +127,7 @@ namespace FaceAttendance.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,StudentCode,StudentName,imageUrl,active")] Student student)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,StudentCode,StudentName,imageUrl,active")] Student student, List<IFormFile> postedFiles)
         {
             if (id != student.ID)
             {
@@ -130,6 +138,7 @@ namespace FaceAttendance.Controllers
             {
                 try
                 {
+
                     _context.Update(student);
                     await _context.SaveChangesAsync();
                 }
@@ -144,6 +153,46 @@ namespace FaceAttendance.Controllers
                         throw;
                     }
                 }
+                if (postedFiles.Count > 0)
+                {
+                    try
+                    {
+                        BlobStorage.DeleteAFile("images", student.StudentCode + ".jpg");
+                    }
+                    catch(Azure.RequestFailedException)
+                    {
+                        
+                    }
+
+                    string wwwPath = this.Environment.WebRootPath;
+                    string contentPath = this.Environment.ContentRootPath;
+
+                    string path = Path.Combine(this.Environment.WebRootPath, "image");
+                    string fileName = student.ID.ToString() + ".jpg";   //Path.GetFileName(postedFile.FileName);
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+
+                    List<string> uploadedFiles = new List<string>();
+                    foreach (IFormFile postedFile in postedFiles)
+                    {
+
+
+                        using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                        {
+                            postedFile.CopyTo(stream);
+                            uploadedFiles.Add(fileName);
+                            ViewBag.Message += string.Format("<b>{0}</b> uploaded.<br />", fileName);
+                        }
+                        BlobStorage.UploadAFile("images", fileName);
+                        System.IO.File.Delete(("./wwwroot/image/" + fileName));
+                    }
+                    student.imageUrl = Constants.IMAGE_BASE_URL + fileName;
+                    _context.Update(student);
+                    await _context.SaveChangesAsync();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             return View(student);
@@ -164,6 +213,7 @@ namespace FaceAttendance.Controllers
                 return NotFound();
             }
 
+
             return View(student);
         }
 
@@ -174,6 +224,10 @@ namespace FaceAttendance.Controllers
         {
             var student = await _context.Students.FindAsync(id);
             _context.Students.Remove(student);
+            if (student.imageUrl != null)
+            {
+                BlobStorage.DeleteAFile("images", student.ID + ".jpg");
+            }
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
