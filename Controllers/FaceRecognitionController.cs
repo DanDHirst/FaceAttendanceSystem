@@ -10,16 +10,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using FaceAttendance.Models;
 using Microsoft.AspNetCore.Hosting;
+using FaceAttendance.Data;
 
 namespace FaceAttendance.Controllers
 {
     public class FaceRecognitionController : Controller
     {
         private IHostingEnvironment Environment;
+        private readonly CourseContext _context;
 
-        public FaceRecognitionController(IHostingEnvironment _environment)
+        public FaceRecognitionController(IHostingEnvironment _environment, CourseContext context)
         {
             Environment = _environment;
+            _context = context;
+
         }
 
         // GET: FaceRecognition
@@ -30,7 +34,7 @@ namespace FaceAttendance.Controllers
         }
 
         // GET: FaceRecognition/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> DetailsAsync(int id)
         {
 
             const string IMAGE_BASE_URL = "https://facerecogimages.blob.core.windows.net/images/";
@@ -51,9 +55,22 @@ namespace FaceAttendance.Controllers
             BlobStorage.DeleteAFile("newimage", filename);
 
             ImageDetails matchedImage = new ImageDetails();
-            matchedImage.name = face.name;
+            if(matchedImage.url == null)
+            {
+                matchedImage.notFound = true;
+                return View(matchedImage);
+            }
+            
             matchedImage.url = face.url;
-            matchedImage.confidence = face.confidence;
+            matchedImage.confidence = (face.confidence*100);
+            int idWithoutExtension = int.Parse(Path.GetFileNameWithoutExtension(face.name));
+            matchedImage.ID = idWithoutExtension;
+
+            var student = await _context.Students.FindAsync(idWithoutExtension);
+            matchedImage.studentCode = student.StudentCode;
+            matchedImage.username = student.StudentName;
+            matchedImage.active = student.active;
+
             System.IO.File.Delete(("./wwwroot/image/" + filename));
             return View(matchedImage);
         }

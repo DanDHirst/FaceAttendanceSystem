@@ -4,7 +4,21 @@
 @model FaceAttendance.Models.ImageDetails
 @{
 }
-<p>@Html.DisplayFor(model => model.name)</p>
-<img src="@Html.DisplayFor(model => model.url)" alt="Photo of user">
-<p>confidence @Html.DisplayFor(model => model.confidence)</p>
+@{var notFound = Model.notFound;   }
+
+@if (notFound)
+{
+    <p>User not found try again</p>
+}
+else
+{
+    <p>ID: @Html.DisplayFor(model => model.ID)</p>
+    <p>Username: @Html.DisplayFor(model => model.username)</p>
+    <p>Student Code @Html.DisplayFor(model => model.studentCode)</p>
+    <p>Active: @Html.DisplayFor(model => model.active)</p>
+    <img src="@Html.DisplayFor(model => model.url)" alt="Photo of user" width="100" height="100">
+    <p>confidence: @Html.DisplayFor(model => model.confidence)%</p>
+}
+
+
 

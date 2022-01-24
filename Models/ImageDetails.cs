@@ -7,9 +7,16 @@ namespace FaceAttendance.Models
 {
     public class ImageDetails
     {
-        public string name { get; set; }
+        public int ID { get; set; }
         public string url { get; set; }
         public double confidence { get; set; }
+
+        public string username { get; set; }
+        public int studentCode { get; set; }
+
+        public Boolean active { get; set; }
+        public Boolean notFound { get; set; }
+
 
     }
 }
