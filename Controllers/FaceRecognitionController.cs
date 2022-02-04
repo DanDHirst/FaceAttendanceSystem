@@ -55,13 +55,15 @@ namespace FaceAttendance.Controllers
             BlobStorage.DeleteAFile("newimage", filename);
 
             ImageDetails matchedImage = new ImageDetails();
-            if(matchedImage.url == null)
-            {
-                matchedImage.notFound = true;
-                return View(matchedImage);
-            }
+            
             
             matchedImage.url = face.url;
+            if (matchedImage.url == null)
+            {
+                matchedImage.notFound = true;
+                System.IO.File.Delete(("./wwwroot/image/" + filename));
+                return View(matchedImage);
+            }
             matchedImage.confidence = (face.confidence*100);
             int idWithoutExtension = int.Parse(Path.GetFileNameWithoutExtension(face.name));
             matchedImage.ID = idWithoutExtension;
