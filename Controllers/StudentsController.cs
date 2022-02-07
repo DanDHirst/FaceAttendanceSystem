@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using PersonRecog;
 using Microsoft.AspNetCore.Hosting;
+using FaceAttendance.ViewModel;
 
 namespace FaceAttendance.Controllers
 {
@@ -105,6 +106,7 @@ namespace FaceAttendance.Controllers
 
 
         }
+        
 
         // GET: Students/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -113,13 +115,19 @@ namespace FaceAttendance.Controllers
             {
                 return NotFound();
             }
-
+            StudentViewModel viewModel = new StudentViewModel();
+            List<Course> courses = await _context.Courses.ToListAsync();
             var student = await _context.Students.FindAsync(id);
+            viewModel.Student = student;
+            viewModel.Courses = courses;
+            ViewData["Courses"] = new SelectList(courses,"ID","CourseName");
+
+
             if (student == null)
             {
                 return NotFound();
             }
-            return View(student);
+            return View(viewModel);
         }
 
         // POST: Students/Edit/5
@@ -127,8 +135,9 @@ namespace FaceAttendance.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,StudentCode,StudentName,imageUrl,active")] Student student, List<IFormFile> postedFiles)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,StudentCode,StudentName,imageUrl,active")] Student student, List<IFormFile> postedFiles, int selectCourse)
         {
+
             if (id != student.ID)
             {
                 return NotFound();
@@ -140,6 +149,20 @@ namespace FaceAttendance.Controllers
                 {
 
                     _context.Update(student);
+                    var result = await _context.CourseLists.Where(x => x.StudentID == student.ID).ToListAsync();
+                    if (result.Count < 1)
+                    {
+                        CourseList course = new CourseList();
+                        course.StudentID = student.ID;
+                        course.CourseID = selectCourse;
+                        _context.CourseLists.Add(course);
+                    }
+                    var co = (from c in _context.CourseLists
+                              where c.StudentID == student.ID
+                    select c).Single();
+                    co.CourseID = selectCourse;
+
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

@@ -1,4 +1,5 @@
-﻿@model FaceAttendance.Models.Student
+﻿@namespace FaceAttendance.ViewModel
+@model StudentViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -9,35 +10,40 @@
 <h4>Student</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4" >
+    <div class="col-md-4">
         <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ID" />
+            <input type="hidden" asp-for="Student.ID" />
             <div class="form-group">
-                <label asp-for="StudentCode" class="control-label"></label>
-                <input asp-for="StudentCode" class="form-control" />
-                <span asp-validation-for="StudentCode" class="text-danger"></span>
+                <label asp-for="Student.StudentCode" class="control-label"></label>
+                <input asp-for="Student.StudentCode" class="form-control" />
+                <span asp-validation-for="Student.StudentCode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StudentName" class="control-label"></label>
-                <input asp-for="StudentName" class="form-control" />
-                <span asp-validation-for="StudentName" class="text-danger"></span>
+                <label asp-for="Student.StudentName" class="control-label"></label>
+                <input asp-for="Student.StudentName" class="form-control" />
+                <span asp-validation-for="Student.StudentName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="imageUrl" class="control-label"></label>
-                <input asp-for="imageUrl" class="form-control" hidden/>
-                <span asp-validation-for="imageUrl" class="text-danger"></span>
+                <label asp-for="Student.imageUrl" class="control-label"></label>
+                <input asp-for="Student.imageUrl" class="form-control" hidden />
+                <span asp-validation-for="Student.imageUrl" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label  class="control-label">Image upload</label>
+                <label class="control-label">Image upload</label>
                 <span>Select File:</span>
-                <input type="file" name="postedFiles"  class="form-control" />
-                
+                <input type="file" name="postedFiles" class="form-control" />
+
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="active" /> @Html.DisplayNameFor(model => model.active)
+                    <input class="form-check-input" asp-for="Student.active" /> @Html.DisplayNameFor(model => model.Student.active)
                 </label>
+            </div>
+            <div class="form-group">
+
+                <select name="selectCourse"  asp-items="ViewBag.Courses" id="SelectCourse" ></select>
+               
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
