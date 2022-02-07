@@ -120,7 +120,14 @@ namespace FaceAttendance.Controllers
             var student = await _context.Students.FindAsync(id);
             viewModel.Student = student;
             viewModel.Courses = courses;
-            ViewData["Courses"] = new SelectList(courses,"ID","CourseName");
+
+            CourseList co = (from c in _context.CourseLists
+                      where c.StudentID == student.ID
+                      select c).Single();
+            Course courseName = await _context.Courses.FindAsync(co.CourseID);
+
+
+            ViewData["Courses"] = new SelectList(courses,"ID","CourseName",courseName.ID);
 
 
             if (student == null)
