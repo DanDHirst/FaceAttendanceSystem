@@ -32,6 +32,25 @@ namespace FaceAttendance.Controllers
             {
                 return NotFound();
             }
+            List<Student> students = await _context.Students.ToListAsync();
+
+            List<Student> studentsOnCourse = new List<Student>();
+            var courseList = (from c in _context.CourseLists where id == c.CourseID select c).ToList();
+
+
+
+            foreach (CourseList c in courseList)
+            {
+
+                Student student = await _context.Students.FindAsync(c.StudentID);
+                studentsOnCourse.Add(student);
+                
+                
+            }
+
+
+
+
 
             var course = await _context.Courses
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -40,6 +59,7 @@ namespace FaceAttendance.Controllers
                 return NotFound();
             }
 
+            ViewData["Students"] = studentsOnCourse;
             return View(course);
         }
 
