@@ -31,6 +31,17 @@
 
 
 <h1> Students enroled on course</h1>
+<div>Add Student</div>
+<form asp-action="Edit">
+    <div class="form-group">
+        <input type="hidden" asp-for="ID" />
+        <label for="StudentID" class="control-label"> Enter Student ID </label>
+        <input name="StudentID" id="StudentID" class="form-control" placeholder="10237462" required type="number" />
+        <button>Add Student</button>
+    </div>
+</form>
+
+
 <table class="table">
     <thead>
         <tr>

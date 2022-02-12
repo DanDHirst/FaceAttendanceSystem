@@ -106,13 +106,39 @@ namespace FaceAttendance.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,CourseCode,CourseName")] Course course)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,CourseCode,CourseName")] Course course, int StudentID)
         {
+            if(StudentID > 0)
+            {
+
+                CourseList clist = new CourseList();
+
+                var student = (from c in _context.Students
+                                    where c.StudentCode == StudentID
+                                    select c).SingleOrDefault();
+                clist.StudentID = student.ID;
+                
+                clist.CourseID = id;
+                
+                var isInDatabase = (from c in _context.CourseLists
+                               where c.StudentID == student.ID
+                                    select c).SingleOrDefault();
+                if (isInDatabase != null)
+                {
+                    isInDatabase.CourseID = id;
+                }
+                else
+                {
+                    await _context.CourseLists.AddAsync(clist);
+                }
+                await _context.SaveChangesAsync();
+
+                return LocalRedirect("/Courses/Details/"+id);
+            }
             if (id != course.ID)
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 try
