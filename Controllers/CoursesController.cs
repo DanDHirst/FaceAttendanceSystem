@@ -32,6 +32,7 @@ namespace FaceAttendance.Controllers
             {
                 return NotFound();
             }
+            //get all students enroled on course
             List<Student> students = await _context.Students.ToListAsync();
 
             List<Student> studentsOnCourse = new List<Student>();
@@ -44,20 +45,30 @@ namespace FaceAttendance.Controllers
 
                 Student student = await _context.Students.FindAsync(c.StudentID);
                 studentsOnCourse.Add(student);
-                
-                
+                          
+            }
+            //get all modules attached to the course
+            var moduleList = (from c in _context.ModuleLists where id == c.CourseID select c).ToList();
+            List<Module> modules = new List<Module>();
+            foreach (ModuleList m in moduleList)
+            {
+                Module mod = await _context.Modules.FindAsync(m.ModuleID);
+                modules.Add(mod);
             }
 
 
 
 
 
-            var course = await _context.Courses
+
+
+                var course = await _context.Courses
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (course == null)
             {
                 return NotFound();
             }
+            ViewData["Modules"] = modules;
 
             ViewData["Students"] = studentsOnCourse;
             return View(course);
@@ -106,8 +117,36 @@ namespace FaceAttendance.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,CourseCode,CourseName")] Course course, int StudentID)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,CourseCode,CourseName")] Course course, int StudentID, string ModuleCode)
         {
+            //add Module to course
+            if(ModuleCode != null)
+            {
+                //find module
+                var module = (from m in _context.Modules where m.ModuleCode == ModuleCode select m).SingleOrDefault();
+                if(module == null){
+                    return LocalRedirect("/Courses/Details/" + id);
+                }
+
+                //check module isnt already assigned
+                var isInCourse = (from m in _context.ModuleLists where m.ModuleID == module.ID && m.CourseID == id select m).SingleOrDefault();
+
+                if(isInCourse == null)
+                {
+                    ModuleList modList = new ModuleList();
+                    modList.CourseID = id;
+                    modList.ModuleID = module.ID;
+                    modList.ModuleListID = 0;
+                    _context.ModuleLists.Add(modList);
+                    await _context.SaveChangesAsync();
+                }
+                return LocalRedirect("/Courses/Details/" + id);
+
+                //add module to course
+
+            }
+
+            //add student to course
             if(StudentID > 0)
             {
 
@@ -135,6 +174,8 @@ namespace FaceAttendance.Controllers
 
                 return LocalRedirect("/Courses/Details/"+id);
             }
+
+
             if (id != course.ID)
             {
                 return NotFound();

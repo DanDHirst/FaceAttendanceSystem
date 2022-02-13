@@ -26,9 +26,52 @@
 </div>
 @{
     var students = (List<Student>)ViewData["Students"];
+    var modules = (List<Module>)ViewData["Modules"];
 }
 
+<h1>Modules attached to this course</h1>
+<div>Add Module</div>
+<form asp-action="Edit">
+    <div class="form-group">
+        <input type="hidden" asp-for="ID" />
+        <label for="ModuleCode" class="control-label"> Enter Module code </label>
+        <input name="ModuleCode" id="ModuleCode" class="form-control" placeholder="Comp500" required />
+        <button>Add Module</button>
+    </div>
+</form>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Module Name
+            </th>
+            <th>
+                Module Code
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in modules)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModuleName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModuleCode)
+                </td>
+                <td>
+                    @{ var ModuleDetails = "/Modules/Details/" + item.ID;
+                    }|
+                    <a href=@ModuleDetails>Details</a> |
+                    <a>Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 <h1> Students enroled on course</h1>
 <div>Add Student</div>
@@ -78,8 +121,12 @@
                     @Html.DisplayFor(modelItem => item.active)
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> 
+                    @{ var StudentDetails = "/Students/Details/" + item.ID;
+                    }
+                    <a href=@StudentDetails>Details</a>
+
                 </td>
+
             </tr>
         }
     </tbody>
