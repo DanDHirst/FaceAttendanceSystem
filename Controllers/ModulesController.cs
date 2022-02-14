@@ -32,6 +32,18 @@ namespace FaceAttendance.Controllers
             {
                 return NotFound();
             }
+            //get all courses that contain this module
+
+            List<ModuleList> modList = await (from m in _context.ModuleLists where m.ModuleID == id select m).ToListAsync();
+            List<Course> courses = new List<Course>();
+
+            foreach(var m in modList)
+            {
+                Course c = await _context.Courses.FindAsync(m.CourseID);
+                courses.Add(c);
+            }
+
+
 
             var @module = await _context.Modules
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -39,7 +51,7 @@ namespace FaceAttendance.Controllers
             {
                 return NotFound();
             }
-
+            ViewData["Courses"] = courses;
             return View(@module);
         }
 
