@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FaceAttendance.Tests
+namespace FaceAttendance.Tests.Model_UnitTests
 {
     [TestFixture]
     public class ModuleTest

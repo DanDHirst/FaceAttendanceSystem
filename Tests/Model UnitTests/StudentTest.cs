@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using FaceAttendance.Models;
 using NUnit.Framework;
 
-namespace FaceAttendance.Tests
+namespace FaceAttendance.Tests.Model_UnitTests
 {
     [TestFixture]
     public class StudentTest
