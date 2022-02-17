@@ -37,10 +37,10 @@ namespace FaceAttendance.Controllers
         public async Task<ActionResult> DetailsAsync(int id)
         {
 
-            const string IMAGE_BASE_URL = "https://facerecogimages.blob.core.windows.net/images/";
-            const string IMAGE_NEW_URL = "https://facerecogimages.blob.core.windows.net/newimage/";
+            const string IMAGE_BASE_URL = "https://faceattendimages.blob.core.windows.net/images/";
+            const string IMAGE_NEW_URL = "https://faceattendimages.blob.core.windows.net/newimage/";
 
-            const string SUBSCRIPTION_KEY = "6c52f188e2a646efaa63ab64e8bc319f";
+            const string SUBSCRIPTION_KEY = "28ddc22f482a466eb600ecafb7962bbe";
             const string ENDPOINT = "https://uksouth.api.cognitive.microsoft.com/";
             const string RECOGNITION_MODEL3 = RecognitionModel.Recognition03;
             var filename = "newPhoto.jpg";

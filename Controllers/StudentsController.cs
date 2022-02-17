@@ -187,7 +187,7 @@ namespace FaceAttendance.Controllers
                 {
                     try
                     {
-                        BlobStorage.DeleteAFile("images", student.StudentCode + ".jpg");
+                        BlobStorage.DeleteAFile("images", student.ID + ".jpg");
                     }
                     catch(Azure.RequestFailedException)
                     {

@@ -14,7 +14,7 @@ namespace FaceAttendance.Controllers
 {
     public class UsersController : Controller
     {
-        const string IMAGE_BASE_URL = "https://facerecogimages.blob.core.windows.net/images/";
+        const string IMAGE_BASE_URL = "https://faceattendimages.blob.core.windows.net/images/";
         private IWebHostEnvironment Environment;
 
         public UsersController(IWebHostEnvironment _environment)

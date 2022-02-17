@@ -11,7 +11,7 @@ namespace PersonRecog
     class BlobStorage
     {
         static string _connectionString =
-            "DefaultEndpointsProtocol=https;AccountName=facerecogimages;AccountKey=oXU5YZZ8XmRK6nUsawxuUKHVFVat6HAOo+YbW80HDWyeWlzMIZG0MIfA78LuZVIC0p6TC2aoPPxnPibWHoutaA==;EndpointSuffix=core.windows.net";
+            "DefaultEndpointsProtocol=https;AccountName=faceattendimages;AccountKey=g1VnlmiQ8ChdJluUaPpoOAHtk1WD/CpcNjzTuBKS3P8PekttQvm46jhhRGyG/e3meS7fB/W4AP8+ftjcDNAq+A==;EndpointSuffix=core.windows.net";
 
         
         
