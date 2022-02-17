@@ -5,16 +5,15 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
+using FaceAttendance.Models;
 
 namespace PersonRecog
 {
     class BlobStorage
     {
-        static string _connectionString =
-            "DefaultEndpointsProtocol=https;AccountName=faceattendimages;AccountKey=g1VnlmiQ8ChdJluUaPpoOAHtk1WD/CpcNjzTuBKS3P8PekttQvm46jhhRGyG/e3meS7fB/W4AP8+ftjcDNAq+A==;EndpointSuffix=core.windows.net";
+        static string _connectionString = Constants._connectionString;
 
-        
-        
+
 
         public static IEnumerable<string> GetBlobs(string name)
         {
