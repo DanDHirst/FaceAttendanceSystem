@@ -44,6 +44,10 @@ namespace FaceAttendance.Controllers
             }
 
 
+            //get all the clas ses on the module
+            List<Class> classes = await (from c in _context.Classes where c.ModuleID == id select c).ToListAsync();
+
+
 
             var @module = await _context.Modules
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -52,6 +56,7 @@ namespace FaceAttendance.Controllers
                 return NotFound();
             }
             ViewData["Courses"] = courses;
+            ViewData["Classes"] = classes;
             return View(@module);
         }
 

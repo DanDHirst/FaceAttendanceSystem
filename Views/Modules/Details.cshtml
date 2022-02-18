@@ -10,22 +10,22 @@
     <h4>Module</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ModuleName)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ModuleName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ModuleCode)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ModuleCode)
         </dd>
     </dl>
 </div>
 <h1>Courses this module is connected to</h1>
-@{ 
+@{
     var courses = (List<Course>)ViewData["Courses"];
 }
 <table class="table">
@@ -52,11 +52,71 @@
                 </td>
                 <td>
 
-                   
+
                     @{ var CourseDetails = "/Courses/Details/" + item.ID;
                     }|
                     <a href=@CourseDetails>Details</a>
 
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@{
+    var classes = (List<Class>)ViewData["Classes"];
+}
+
+<h1>classes on this course</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Class Code)
+            </th>
+            <th>
+                Room
+            </th>
+            <th>
+                StartDateTime
+            </th>
+            <th>
+                EndDateTime
+            </th>
+            <th>
+                Lecturer
+            </th>
+            <th>
+                Module
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in classes)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClassCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Room)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LecturerID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModuleID)
+                </td>
+                <td>
+                    @{ var ClassDetails = "/Classes/Details/" + item.ID;
+                    }|
+                    <a href=@ClassDetails>Details</a>
                 </td>
             </tr>
         }
