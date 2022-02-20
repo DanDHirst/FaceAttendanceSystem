@@ -34,6 +34,34 @@ namespace FaceAttendance.Controllers
                 return NotFound();
             }
 
+
+            //find all the students attached to this class
+            //get find moduleID
+            Class cla = await _context.Classes.FindAsync(id);
+            //find all the courses that match to the module
+            var modules = await (from m in _context.ModuleLists where m.ModuleID == cla.ModuleID select m).ToListAsync();
+            List<Course> courses = new List<Course>();  
+            foreach (var m in modules)
+            {
+                var course = await _context.Courses.FindAsync(m.CourseID);
+                courses.Add(course);
+            }
+            //find all the students on the courses
+            List<Student> students = new List<Student>();
+            foreach (var c in courses)
+            {
+                var courselist = await (from cl in _context.CourseLists where cl.CourseID == c.ID select cl).ToListAsync();
+                foreach (var cl in courselist)
+                {
+                    var student = await _context.Students.FindAsync(cl.StudentID);
+                    students.Add(student);
+                }
+            }
+            //send data to the page
+            ViewData["Students"] = students;
+
+
+
             var @class = await _context.Classes
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (@class == null)
