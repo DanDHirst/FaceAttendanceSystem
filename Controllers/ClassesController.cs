@@ -295,7 +295,18 @@ namespace FaceAttendance.Controllers
 
             System.IO.File.Delete(("./wwwroot/image/" + filename));
 
-            
+            RegisteredStudent rs = new RegisteredStudent
+            {
+                ClassID = id,
+                StudentID = matchedImage.ID,
+                RegisteredTime = DateTime.Now,
+
+          
+                
+            };
+
+            _context.RegisteredStudents.Add(rs);
+            await _context.SaveChangesAsync();
 
             ViewData["Students"] = students;
             ViewData["Matched"] = matchedImage;
