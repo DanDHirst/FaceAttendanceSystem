@@ -264,14 +264,14 @@ namespace FaceAttendance.Controllers
             const string ENDPOINT = Constants.ENDPOINT;
             const string RECOGNITION_MODEL3 = RecognitionModel.Recognition03;
             var filename = "newPhoto.jpg";
-
+            var students = await GetStudentsAsync(id);
             BlobStorage.UploadAFile("newimage", filename);
 
             // Authenticate.
             var client = FaceRecognition.Authenticate(ENDPOINT, SUBSCRIPTION_KEY);
             var face = new FaceRecognition();
             // Find Similar - find a similar face from a list of faces.
-            face.FindSimilar(client, IMAGE_BASE_URL, IMAGE_NEW_URL, RECOGNITION_MODEL3).Wait();
+            face.FindSimilar(client, IMAGE_BASE_URL, IMAGE_NEW_URL, RECOGNITION_MODEL3,students).Wait();
             BlobStorage.DeleteAFile("newimage", filename);
 
             ImageDetails matchedImage = new ImageDetails();
@@ -295,7 +295,7 @@ namespace FaceAttendance.Controllers
 
             System.IO.File.Delete(("./wwwroot/image/" + filename));
 
-            var students = await GetStudentsAsync(id);
+            
 
             ViewData["Students"] = students;
             ViewData["Matched"] = matchedImage;

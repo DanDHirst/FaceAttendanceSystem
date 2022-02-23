@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.CognitiveServices.Vision.Face;
 using Microsoft.Azure.CognitiveServices.Vision.Face.Models;
+using FaceAttendance.Models;
 
 namespace PersonRecog
 {
@@ -31,7 +32,7 @@ namespace PersonRecog
             return detectedFaces.ToList();
         }
 
-        public   async Task  FindSimilar(IFaceClient client, string url, string newImage, string recognition_model)
+        public   async Task  FindSimilar(IFaceClient client, string url, string newImage, string recognition_model,List<Student> students)
         {
             Console.WriteLine("========FIND SIMILAR========");
             Console.WriteLine();
@@ -54,7 +55,18 @@ namespace PersonRecog
                 "Dan Hirst.jpg"
 
             };*/
-            List<string> ImageList = BlobStorage.GetBlobs("images").ToList();
+            List<string> ImageList = new List<string>();
+            if (students == null)
+            {
+                ImageList = BlobStorage.GetBlobs("images").ToList();
+            }
+            else
+            {
+                foreach(var s in students)
+                {
+                    ImageList.Add(s.imageUrl);
+                }
+            }
 
             IList<Guid?> targetFaceIds = new List<Guid?>();
             foreach (var targetImageFileName in targetImageFileNames)
@@ -69,9 +81,9 @@ namespace PersonRecog
             // Detect faces from source image url.
             foreach (var Image in ImageList)
             {
-
+                var imageName = Path.GetFileName(Image);
                 IList<DetectedFace> detectedFaces =
-                    await DetectFaceRecognize(client, $"{url}{Image}", recognition_model);
+                    await DetectFaceRecognize(client, $"{url}{imageName}", recognition_model);
                 Console.WriteLine();
 
                 // Find a similar face(s) in the list of IDs. Comapring only the first in list for testing purposes.
