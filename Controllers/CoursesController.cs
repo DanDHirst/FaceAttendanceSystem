@@ -232,6 +232,18 @@ namespace FaceAttendance.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost, ActionName("RemoveModule")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveModule(int id, int moduleID)
+        {
+            //get id of modulelists
+            var modulelist = await (from ml in _context.ModuleLists where ml.CourseID == id && ml.ModuleID == moduleID select ml).SingleAsync();
+            _context.ModuleLists.Remove(modulelist);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Details", new { id = id });
+        }
+
+
         private bool CourseExists(int id)
         {
             return _context.Courses.Any(e => e.ID == id);
