@@ -242,7 +242,16 @@ namespace FaceAttendance.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Details", new { id = id });
         }
-
+        [HttpPost, ActionName("RemoveStudent")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveStudent(int id, int studentID)
+        {
+            //get id of student in courselists
+            var student = await (from cl in _context.CourseLists where cl.CourseID == id && cl.StudentID == studentID select cl).SingleAsync();
+            _context.CourseLists.Remove(student);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Details", new { id = id });
+        }
 
         private bool CourseExists(int id)
         {

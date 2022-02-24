@@ -130,6 +130,12 @@
                     @{ var StudentDetails = "/Students/Details/" + item.ID;
                     }
                     <a href=@StudentDetails>Details</a>
+                    <form asp-action="RemoveStudent">
+                        <input type="hidden" asp-for="ID" />
+                        <input type="hidden" name="studentID" value="@item.ID" />
+                        <button>Delete</button>
+
+                    </form>
 
                 </td>
 
