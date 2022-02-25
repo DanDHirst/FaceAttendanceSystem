@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FaceAttendance.Data;
 using FaceAttendance.Models;
+using PersonRecog;
+using Microsoft.Azure.CognitiveServices.Vision.Face.Models;
+using System.IO;
 
 namespace FaceAttendance.Controllers
 {
@@ -19,6 +22,32 @@ namespace FaceAttendance.Controllers
         public RegisteredStudentsController(CourseContext context)
         {
             _context = context;
+        }
+        public async Task<List<Student>> GetStudentsAsync(int? id)
+        {
+            //find all the students attached to this class
+            //get find moduleID
+            Class cla = await _context.Classes.FindAsync(id);
+            //find all the courses that match to the module
+            var modules = await (from m in _context.ModuleLists where m.ModuleID == cla.ModuleID select m).ToListAsync();
+            List<Course> courses = new List<Course>();
+            foreach (var m in modules)
+            {
+                var course = await _context.Courses.FindAsync(m.CourseID);
+                courses.Add(course);
+            }
+            //find all the students on the courses
+            List<Student> students = new List<Student>();
+            foreach (var c in courses)
+            {
+                var courselist = await (from cl in _context.CourseLists where cl.CourseID == c.ID select cl).ToListAsync();
+                foreach (var cl in courselist)
+                {
+                    var student = await _context.Students.FindAsync(cl.StudentID);
+                    students.Add(student);
+                }
+            }
+            return students;
         }
 
         // GET: api/RegisteredStudents
@@ -78,14 +107,71 @@ namespace FaceAttendance.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<RegisteredStudent>> PostRegisteredStudent(RegisteredStudent registeredStudent)
+        public async Task<ActionResult<ImageDetails>> PostRegisteredStudent(string filename, string room)
         {
-            _context.RegisteredStudents.Add(registeredStudent);
+
+            const string IMAGE_BASE_URL = Constants.IMAGE_BASE_URL;
+            const string IMAGE_NEW_URL = Constants.IMAGE_NEW_URL;
+
+            const string SUBSCRIPTION_KEY = Constants.SUBSCRIPTION_KEY;
+            const string ENDPOINT = Constants.ENDPOINT;
+            const string RECOGNITION_MODEL3 = RecognitionModel.Recognition03;
+            
+            //find class from room 
+            var Class = (from c in _context.Classes where c.Room == room select c).Single();
+
+
+
+
+
+            var students = await GetStudentsAsync(Class.ID);
+
+            // Authenticate.
+            var client = FaceRecognition.Authenticate(ENDPOINT, SUBSCRIPTION_KEY);
+            var face = new FaceRecognition();
+            // Find Similar - find a similar face from a list of faces.
+            face.FindSimilar(client, IMAGE_BASE_URL, IMAGE_NEW_URL, RECOGNITION_MODEL3, students).Wait();
+            BlobStorage.DeleteAFile("newimage", filename);
+
+            ImageDetails matchedImage = new ImageDetails();
+
+
+            matchedImage.url = face.url;
+            if (matchedImage.url == null)
+            {
+                matchedImage.notFound = true;
+                System.IO.File.Delete(("./wwwroot/image/" + filename));
+                return matchedImage;
+
+            }
+            matchedImage.confidence = (face.confidence * 100);
+            int idWithoutExtension = int.Parse(Path.GetFileNameWithoutExtension(face.name));
+            matchedImage.ID = idWithoutExtension;
+
+            var student = await _context.Students.FindAsync(idWithoutExtension);
+            matchedImage.studentCode = student.StudentCode;
+            matchedImage.username = student.StudentName;
+            matchedImage.active = student.active;
+
+            System.IO.File.Delete(("./wwwroot/image/" + filename));
+
+            RegisteredStudent rs = new RegisteredStudent
+            {
+                ClassID = Class.ID,
+                StudentID = matchedImage.ID,
+                RegisteredTime = DateTime.Now,
+
+
+
+            };
+
+            _context.RegisteredStudents.Add(rs);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRegisteredStudent", new { id = registeredStudent.ID }, registeredStudent);
+            return (matchedImage);
         }
 
+       
         // DELETE: api/RegisteredStudents/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<RegisteredStudent>> DeleteRegisteredStudent(int id)
