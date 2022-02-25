@@ -106,7 +106,7 @@ namespace PersonRecog
                         result +=
                             $"Person is {Image} with confidence: {similarResult.Confidence}.";
                         name = Image;
-                        this.url = $"{url}{Image}";
+                        this.url = $"{Image}";
                         confidence = similarResult.Confidence;
 
                     }
