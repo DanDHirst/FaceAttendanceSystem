@@ -64,7 +64,11 @@ namespace PersonRecog
             {
                 foreach(var s in students)
                 {
-                    ImageList.Add(s.imageUrl);
+                    if(s.imageUrl != null)
+                    {
+                        ImageList.Add(s.imageUrl);
+                    }
+                    
                 }
             }
 
