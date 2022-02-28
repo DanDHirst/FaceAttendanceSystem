@@ -120,7 +120,7 @@ namespace FaceAttendance.Controllers
             //find class from room 
             var Class = (from c in _context.Classes where c.Room == room select c).Single();
             //remove when python upload is created
-            BlobStorage.UploadAFile("newimage", filename);
+            //BlobStorage.UploadAFile("newimage", filename);
 
 
 
