@@ -32,7 +32,7 @@ namespace PersonRecog
             return detectedFaces.ToList();
         }
 
-        public   async Task  FindSimilar(IFaceClient client, string url, string newImage, string recognition_model,List<Student> students)
+        public   async Task  FindSimilar(IFaceClient client, string url, string newImage, string recognition_model,List<Student> students,string filename)
         {
             Console.WriteLine("========FIND SIMILAR========");
             Console.WriteLine();
@@ -44,7 +44,8 @@ namespace PersonRecog
 
             };*/
 
-            List<string> targetImageFileNames = BlobStorage.GetBlobs("newimage").ToList();
+            List<string> targetImageFileNames = new List<string>();  //BlobStorage.GetBlobs("newimage").ToList();
+            targetImageFileNames.Add(filename);
             /*List<string> ImageList = new List<string>
             {
                 *//*"image4.jpeg",
