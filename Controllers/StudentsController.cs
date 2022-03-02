@@ -172,10 +172,14 @@ namespace FaceAttendance.Controllers
                         course.CourseID = selectCourse;
                         _context.CourseLists.Add(course);
                     }
-                    var co = (from c in _context.CourseLists
-                              where c.StudentID == student.ID
-                    select c).Single();
-                    co.CourseID = selectCourse;
+                    else
+                    {
+                        var co = (from c in _context.CourseLists
+                                  where c.StudentID == student.ID
+                                  select c).Single();
+                        co.CourseID = selectCourse;
+                    }
+                    
 
 
                     await _context.SaveChangesAsync();
