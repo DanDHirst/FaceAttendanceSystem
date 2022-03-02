@@ -38,7 +38,9 @@ namespace PersonRecog
 
                 var file = File.OpenRead("./wwwroot/image/" + filename);
 
-                // Upload a couple of blobs so we have something to list
+            // Upload a couple of blobs so we have something to list
+            container.DeleteBlobIfExists(filename);
+
             container.UploadBlob(filename, file);
 
                  // List all the blobs

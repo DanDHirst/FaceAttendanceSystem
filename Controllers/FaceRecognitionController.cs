@@ -46,12 +46,13 @@ namespace FaceAttendance.Controllers
             var filename = "newPhoto.jpg";
 
             BlobStorage.UploadAFile("newimage", filename);
+            var studnets =  _context.Students.ToList();
 
             // Authenticate.
             var client = FaceRecognition.Authenticate(ENDPOINT, SUBSCRIPTION_KEY);
             var face = new FaceRecognition();
             // Find Similar - find a similar face from a list of faces.
-            face.FindSimilar(client, IMAGE_BASE_URL, IMAGE_NEW_URL, RECOGNITION_MODEL3).Wait();
+            face.FindSimilar(client, IMAGE_BASE_URL, IMAGE_NEW_URL, RECOGNITION_MODEL3, studnets, filename).Wait();
             BlobStorage.DeleteAFile("newimage", filename);
 
             ImageDetails matchedImage = new ImageDetails();

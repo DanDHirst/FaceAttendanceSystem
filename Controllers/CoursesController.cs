@@ -232,6 +232,27 @@ namespace FaceAttendance.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost, ActionName("RemoveModule")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveModule(int id, int moduleID)
+        {
+            //get id of modulelists
+            var modulelist = await (from ml in _context.ModuleLists where ml.CourseID == id && ml.ModuleID == moduleID select ml).SingleAsync();
+            _context.ModuleLists.Remove(modulelist);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Details", new { id = id });
+        }
+        [HttpPost, ActionName("RemoveStudent")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveStudent(int id, int studentID)
+        {
+            //get id of student in courselists
+            var student = await (from cl in _context.CourseLists where cl.CourseID == id && cl.StudentID == studentID select cl).SingleAsync();
+            _context.CourseLists.Remove(student);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Details", new { id = id });
+        }
+
         private bool CourseExists(int id)
         {
             return _context.Courses.Any(e => e.ID == id);
