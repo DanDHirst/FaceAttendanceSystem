@@ -35,8 +35,8 @@
     <div class="form-group">
         <input type="hidden" asp-for="ID" />
         <label for="ModuleCode" class="control-label"> Enter Module code </label>
-        <input name="ModuleCode" id="ModuleCode" class="form-control" placeholder="Comp500" required />
-        <button>Add Module</button>
+        <input name="ModuleCode" id="EnterModuleCode" class="form-control" placeholder="Comp500" required />
+        <button id="AddModule" >Add Module</button>
     </div>
 </form>
 
@@ -56,20 +56,20 @@
         @foreach (var item in modules)
         {
             <tr>
-                <td>
+                <td id="ModuleName">
                     @Html.DisplayFor(modelItem => item.ModuleName)
                 </td>
-                <td>
+                <td id="ModuleCode">
                     @Html.DisplayFor(modelItem => item.ModuleCode)
                 </td>
                 <td>
                     @{ var ModuleDetails = "/Modules/Details/" + item.ID;
                     }|
-                    <a href=@ModuleDetails>Details</a> |
+                    <a href=@ModuleDetails id="ModuleDetails">Details</a> |
                     <form asp-action="RemoveModule">
                         <input type="hidden" asp-for="ID" />
                         <input type="hidden" name="moduleID" value="@item.ID" />
-                        <button>Delete</button>
+                        <button id="DeleteModule" >Delete</button>
 
                     </form>
                  
@@ -85,8 +85,8 @@
     <div class="form-group">
         <input type="hidden" asp-for="ID" />
         <label for="StudentID" class="control-label"> Enter Student ID </label>
-        <input name="StudentID" id="StudentID" class="form-control" placeholder="10237462" required type="number" />
-        <button>Add Student</button>
+        <input name="StudentID" id="EnterStudentID" class="form-control" placeholder="10237462" required type="number" />
+        <button id="AddStudent" >Add Student</button>
     </div>
 </form>
 
@@ -113,27 +113,27 @@
         @foreach (var item in students)
         {
             <tr>
-                <td>
+                <td id="StudentCode">
                     @Html.DisplayFor(modelItem => item.StudentCode)
                 </td>
-                <td>
+                <td id="StudentName">
                     @Html.DisplayFor(modelItem => item.StudentName)
                 </td>
                 <td>
                     <img src=@Html.DisplayFor(modelItem => item.imageUrl) width="100" height="100">
 
                 </td>
-                <td>
+                <td id="Active">
                     @Html.DisplayFor(modelItem => item.active)
                 </td>
                 <td>
                     @{ var StudentDetails = "/Students/Details/" + item.ID;
                     }
-                    <a href=@StudentDetails>Details</a>
+                    <a href=@StudentDetails id="StudentDetails">Details</a>
                     <form asp-action="RemoveStudent">
                         <input type="hidden" asp-for="ID" />
                         <input type="hidden" name="studentID" value="@item.ID" />
-                        <button>Delete</button>
+                        <button id="DeleteStudent" >Delete</button>
 
                     </form>
 
@@ -147,6 +147,6 @@
 
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" id="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <a asp-action="Index" id="Back">Back to List</a>
 </div>
