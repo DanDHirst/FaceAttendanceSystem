@@ -123,11 +123,19 @@ namespace FaceAttendance.Controllers
 
             CourseList co = (from c in _context.CourseLists
                       where c.StudentID == student.ID
-                      select c).Single();
-            Course courseName = await _context.Courses.FindAsync(co.CourseID);
+                      select c).SingleOrDefault();
+            if(co != null)
+            {
+                Course courseName = await _context.Courses.FindAsync(co.CourseID);
+                ViewData["Courses"] = new SelectList(courses, "ID", "CourseName", courseName.ID);
+            }
+            else
+            {
+                ViewData["Courses"] = new SelectList(courses, "ID", "CourseName");
+            }
 
 
-            ViewData["Courses"] = new SelectList(courses,"ID","CourseName",courseName.ID);
+            
 
 
             if (student == null)
@@ -164,10 +172,14 @@ namespace FaceAttendance.Controllers
                         course.CourseID = selectCourse;
                         _context.CourseLists.Add(course);
                     }
-                    var co = (from c in _context.CourseLists
-                              where c.StudentID == student.ID
-                    select c).Single();
-                    co.CourseID = selectCourse;
+                    else
+                    {
+                        var co = (from c in _context.CourseLists
+                                  where c.StudentID == student.ID
+                                  select c).Single();
+                        co.CourseID = selectCourse;
+                    }
+                    
 
 
                     await _context.SaveChangesAsync();
@@ -256,7 +268,16 @@ namespace FaceAttendance.Controllers
             _context.Students.Remove(student);
             if (student.imageUrl != null)
             {
-                BlobStorage.DeleteAFile("images", student.ID + ".jpg");
+                var blobName = student.ID + ".jpg";
+                var blobs  = BlobStorage.GetBlobs("images");
+                foreach(var blob in blobs)
+                {
+                    if(blobName == blob)
+                    {
+                        BlobStorage.DeleteAFile("images", student.ID + ".jpg");
+                    }
+                }
+                
             }
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

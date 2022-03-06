@@ -1,7 +1,7 @@
 ﻿@model FaceAttendance.Models.Module
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Module Details";
 }
 
 <h1>Details</h1>
@@ -13,13 +13,13 @@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ModuleName)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-10" id="ModuleName">
             @Html.DisplayFor(model => model.ModuleName)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ModuleCode)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-10" id="ModuleCode">
             @Html.DisplayFor(model => model.ModuleCode)
         </dd>
     </dl>
@@ -32,10 +32,10 @@
     <thead>
         <tr>
             <th>
-                Course Code)
+                Course Code
             </th>
             <th>
-                Course Name)
+                Course Name
             </th>
             <th></th>
         </tr>
@@ -44,18 +44,18 @@
         @foreach (var item in courses)
         {
             <tr>
-                <td>
+                <td id="CourseCode">
                     @Html.DisplayFor(modelItem => item.CourseCode)
                 </td>
-                <td>
+                <td id="CourseName">
                     @Html.DisplayFor(modelItem => item.CourseName)
                 </td>
                 <td>
 
 
                     @{ var CourseDetails = "/Courses/Details/" + item.ID;
-                    }|
-                    <a href=@CourseDetails>Details</a>
+                    }
+                    <a href=@CourseDetails id="CourseDetails">Details</a>
 
                 </td>
             </tr>
@@ -71,7 +71,7 @@
     <thead>
         <tr>
             <th>
-                Class Code)
+                Class Code
             </th>
             <th>
                 Room
@@ -95,28 +95,28 @@
         @foreach (var item in classes)
         {
             <tr>
-                <td>
+                <td id="ClassCode">
                     @Html.DisplayFor(modelItem => item.ClassCode)
                 </td>
-                <td>
+                <td id="Room">
                     @Html.DisplayFor(modelItem => item.Room)
                 </td>
-                <td>
+                <td id="StartDate">
                     @Html.DisplayFor(modelItem => item.StartDateTime)
                 </td>
-                <td>
+                <td id="EndDate">
                     @Html.DisplayFor(modelItem => item.EndDateTime)
                 </td>
-                <td>
+                <td id="LecturerID">
                     @Html.DisplayFor(modelItem => item.LecturerID)
                 </td>
-                <td>
+                <td id="LecturerID">
                     @Html.DisplayFor(modelItem => item.ModuleID)
                 </td>
                 <td>
                     @{ var ClassDetails = "/Classes/Details/" + item.ID;
-                    }|
-                    <a href=@ClassDetails>Details</a>
+                    }
+                    <a href=@ClassDetails id="ClassDetails">Details</a>
                 </td>
             </tr>
         }
@@ -125,5 +125,5 @@
 
 <div>
     <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" id="Back">Back to List</a>
 </div>
