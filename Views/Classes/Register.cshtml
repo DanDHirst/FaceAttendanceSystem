@@ -61,6 +61,17 @@
     </div>
 </form>
 
+Enter Student ID
+<form asp-action="RegisterID">
+    <div class="form-group">
+        <input name="studentID" value="" placeholder="1043289" required />
+        <input name="id" value="@Model.ID" hidden />
+        <button>
+            Register Student
+        </button>
+    </div>
+</form>
+
 @{
     var matched = (ImageDetails)ViewData["Matched"];
 }
@@ -76,6 +87,7 @@ else if (matched.notFound)
 }
 else
 {
+    <text>Student Registered</text>
     <p>ID: @matched.ID</p>
     <p>Username: @matched.username</p>
     <p>Student Code: @matched.studentCode</p>
@@ -89,6 +101,7 @@ else
 
 @{
     var students = (List<Student>)ViewData["Students"];
+    var Registered = (List<RegisteredStudent>)ViewData["Registered"];
 }
 
 <h1>Students enroled on class</h1>
@@ -106,6 +119,12 @@ else
             </th>
             <th>
                 Active
+            </th>
+            <th>
+                Registered
+            </th>
+            <th>
+                Time Registered
             </th>
             <th></th>
         </tr>
@@ -127,6 +146,27 @@ else
                 <td>
                     @Html.DisplayFor(modelItem => item.active)
                 </td>
+                <td>
+                    @foreach (var s in Registered)
+                    {
+                        @if (s.StudentID == item.ID)
+                        {<text>Yes</text>break;
+                    }
+
+                    }
+                </td>
+
+                <td>
+                    @foreach (var s in Registered)
+                    {
+                        @if (s.StudentID == item.ID)
+                        {@Html.DisplayFor(modelItem => s.RegisteredTime)break;
+                    }
+
+                    }
+                </td>
+
+
                 <td>
                     @{ var StudentDetails = "/Students/Details/" + item.ID;
                     }

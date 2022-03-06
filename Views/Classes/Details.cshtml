@@ -50,6 +50,7 @@
 </div>
 @{
     var students = (List<Student>)ViewData["Students"];
+    var Registered = (List<RegisteredStudent>)ViewData["Registered"];
 }
 
 <h1>Students enroled on class</h1>
@@ -68,34 +69,59 @@
             <th>
                 Active
             </th>
+            <th>
+                Registered
+            </th>
+            <th>
+                Time Registered
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in students)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StudentCode)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StudentName)
-                </td>
-                <td>
-                    <img src=@Html.DisplayFor(modelItem => item.imageUrl) width="100" height="100">
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentName)
+            </td>
+            <td>
+                <img src=@Html.DisplayFor(modelItem => item.imageUrl) width="100" height="100">
 
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.active)
-                </td>
-                <td>
-                    @{ var StudentDetails = "/Students/Details/" + item.ID;
-                    }
-                    <a href=@StudentDetails>Details</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.active)
+            </td>
+            <td>
+                @foreach (var s in Registered)
+                {
+                    @if (s.StudentID == item.ID)
+                    {<text>Yes</text>break;
+                }
 
-                </td>
+                }
+            </td>
 
-            </tr>
+            <td>
+                @foreach (var s in Registered)
+                {
+                    @if (s.StudentID == item.ID)
+                    {@Html.DisplayFor(modelItem => s.RegisteredTime)break;
+                }
+
+                }
+            </td>
+            <td>
+                @{ var StudentDetails = "/Students/Details/" + item.ID;
+                }
+                <a href=@StudentDetails>Details</a>
+
+            </td>
+
+        </tr>
         }
     </tbody>
 </table>
