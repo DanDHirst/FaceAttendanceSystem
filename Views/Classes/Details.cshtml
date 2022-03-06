@@ -81,61 +81,47 @@
     <tbody>
         @foreach (var item in students)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StudentCode)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StudentName)
-                </td>
-                <td>
-                    <img src=@Html.DisplayFor(modelItem => item.imageUrl) width="100" height="100">
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentName)
+            </td>
+            <td>
+                <img src=@Html.DisplayFor(modelItem => item.imageUrl) width="100" height="100">
 
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.active)
-                </td>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.active)
+            </td>
+            <td>
                 @foreach (var s in Registered)
                 {
-
-
-
-
                     @if (s.StudentID == item.ID)
-                    {
-
-
-                        <td>
-                            Yes
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => s.RegisteredTime)
-                        </td>
-
-                        break;
-
-
-                    }
-
-                    else
-                    {
-                        <td>
-                            No
-                        </td>
-                        <td>
-                        </td>
-                        break;
-                    }
+                    {<text>Yes</text>break;
+                }
 
                 }
-                <td>
-                    @{ var StudentDetails = "/Students/Details/" + item.ID;
-                    }
-                    <a href=@StudentDetails>Details</a>
+            </td>
 
-                </td>
+            <td>
+                @foreach (var s in Registered)
+                {
+                    @if (s.StudentID == item.ID)
+                    {@Html.DisplayFor(modelItem => s.RegisteredTime)break;
+                }
 
-            </tr>
+                }
+            </td>
+            <td>
+                @{ var StudentDetails = "/Students/Details/" + item.ID;
+                }
+                <a href=@StudentDetails>Details</a>
+
+            </td>
+
+        </tr>
         }
     </tbody>
 </table>

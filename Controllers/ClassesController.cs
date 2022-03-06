@@ -229,6 +229,29 @@ namespace FaceAttendance.Controllers
 
 
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegisterID(int id,int studentID)
+        {
+            var student = (from s in _context.Students where s.StudentCode == studentID select s).SingleOrDefault();
+            if (student == null)
+            {
+                return RedirectToAction(nameof(Details), new { id });
+            }
+
+            RegisteredStudent rs = new RegisteredStudent
+            {
+                ClassID = id,
+                StudentID = student.ID,
+                RegisteredTime = DateTime.Now,
+            };
+
+            _context.RegisteredStudents.Add(rs);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details) , new {id});
+        }
+
         // POST: Classes/register/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -313,6 +336,10 @@ namespace FaceAttendance.Controllers
 
             _context.RegisteredStudents.Add(rs);
             await _context.SaveChangesAsync();
+
+            var registeredStudents = (from s in _context.RegisteredStudents where s.ClassID == id select s).ToList();
+
+            ViewData["Registered"] = registeredStudents;
 
             ViewData["Students"] = students;
             ViewData["Matched"] = matchedImage;

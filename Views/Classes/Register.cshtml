@@ -61,6 +61,17 @@
     </div>
 </form>
 
+Enter Student ID
+<form asp-action="RegisterID">
+    <div class="form-group">
+        <input name="studentID" value="" placeholder="1043289" required />
+        <input name="id" value="@Model.ID" hidden />
+        <button>
+            Register Student
+        </button>
+    </div>
+</form>
+
 @{
     var matched = (ImageDetails)ViewData["Matched"];
 }
@@ -76,6 +87,7 @@ else if (matched.notFound)
 }
 else
 {
+    <text>Student Registered</text>
     <p>ID: @matched.ID</p>
     <p>Username: @matched.username</p>
     <p>Student Code: @matched.studentCode</p>
@@ -120,62 +132,49 @@ else
     <tbody>
         @foreach (var item in students)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.StudentCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StudentName)
-            </td>
-            <td>
-                <img src=@Html.DisplayFor(modelItem => item.imageUrl) width="100" height="100">
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StudentCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StudentName)
+                </td>
+                <td>
+                    <img src=@Html.DisplayFor(modelItem => item.imageUrl) width="100" height="100">
 
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.active)
-            </td>
-            @foreach (var s in Registered)
-            {
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.active)
+                </td>
+                <td>
+                    @foreach (var s in Registered)
+                    {
+                        @if (s.StudentID == item.ID)
+                        {<text>Yes</text>break;
+                    }
 
-                
-                
+                    }
+                </td>
 
-                @if (s.StudentID == item.ID)
-                {
-                     
-                    
-                    <td>
-                        Yes
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => s.RegisteredTime)
-                    </td>
+                <td>
+                    @foreach (var s in Registered)
+                    {
+                        @if (s.StudentID == item.ID)
+                        {@Html.DisplayFor(modelItem => s.RegisteredTime)break;
+                    }
 
-                    break;
+                    }
+                </td>
 
 
-                }
+                <td>
+                    @{ var StudentDetails = "/Students/Details/" + item.ID;
+                    }
+                    <a href=@StudentDetails>Details</a>
 
-                else
-                {
-                    <td>
-                       No
-                    </td>
-                    <td>
-                        
-                    </td>
-                    break;
-                }
+                </td>
 
-            }
-            <td>
-                @{ var StudentDetails = "/Students/Details/" + item.ID;
-                }
-                <a href=@StudentDetails>Details</a>
-
-            </td>
-
-        </tr>
+            </tr>
         }
     </tbody>
 </table>
