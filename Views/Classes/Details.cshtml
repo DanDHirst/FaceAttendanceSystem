@@ -50,6 +50,7 @@
 </div>
 @{
     var students = (List<Student>)ViewData["Students"];
+    var Registered = (List<RegisteredStudent>)ViewData["Registered"];
 }
 
 <h1>Students enroled on class</h1>
@@ -67,6 +68,12 @@
             </th>
             <th>
                 Active
+            </th>
+            <th>
+                Registered
+            </th>
+            <th>
+                Time Registered
             </th>
             <th></th>
         </tr>
@@ -88,6 +95,39 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.active)
                 </td>
+                @foreach (var s in Registered)
+                {
+
+
+
+
+                    @if (s.StudentID == item.ID)
+                    {
+
+
+                        <td>
+                            Yes
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => s.RegisteredTime)
+                        </td>
+
+                        break;
+
+
+                    }
+
+                    else
+                    {
+                        <td>
+                            No
+                        </td>
+                        <td>
+                        </td>
+                        break;
+                    }
+
+                }
                 <td>
                     @{ var StudentDetails = "/Students/Details/" + item.ID;
                     }

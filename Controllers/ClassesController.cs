@@ -71,6 +71,9 @@ namespace FaceAttendance.Controllers
 
             //send data to the page
             var students = await GetStudentsAsync(id);
+            var registeredStudents = (from s in _context.RegisteredStudents where s.ClassID == id select s).ToList();
+
+            ViewData["Registered"] = registeredStudents;
 
             ViewData["Students"] = students;
 
@@ -208,6 +211,9 @@ namespace FaceAttendance.Controllers
                 return NotFound();
             }
             var students = await GetStudentsAsync(id);
+            var registeredStudents = (from s in _context.RegisteredStudents where s.ClassID == id select s).ToList();
+
+            ViewData["Registered"] = registeredStudents;
 
             ViewData["Students"] = students;
 
