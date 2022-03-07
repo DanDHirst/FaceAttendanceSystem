@@ -203,7 +203,7 @@ namespace FaceAttendance.Controllers
                     else
                     {
                         var result = await _context.CourseLists.Where(x => x.StudentID == student.ID).ToListAsync();
-                        if(result != null)
+                        if(result.Count > 1)
                         {
                             _context.CourseLists.Remove(result[0]);
                             await _context.SaveChangesAsync();
