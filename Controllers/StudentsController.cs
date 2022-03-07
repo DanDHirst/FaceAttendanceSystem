@@ -176,9 +176,10 @@ namespace FaceAttendance.Controllers
             {
                 try
                 {
+                    _context.Update(student);
                     if (selectCourse != -1)
                     {
-                        _context.Update(student);
+                        
                         var result = await _context.CourseLists.Where(x => x.StudentID == student.ID).ToListAsync();
                         if (result.Count < 1)
                         {
@@ -211,6 +212,7 @@ namespace FaceAttendance.Controllers
                         
 
                     }
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
