@@ -48,6 +48,18 @@ namespace FaceAttendance.Controllers
                 return NotFound();
             }
 
+            CourseList co = (from c in _context.CourseLists
+                             where c.StudentID == student.ID
+                             select c).SingleOrDefault();
+            Course courseName = null;
+            if (co != null)
+            {
+                 courseName = await _context.Courses.FindAsync(co.CourseID);
+            }
+            
+
+            ViewData["Course"] = courseName;
+
             return View(student);
         }
 
@@ -117,6 +129,7 @@ namespace FaceAttendance.Controllers
             }
             StudentViewModel viewModel = new StudentViewModel();
             List<Course> courses = await _context.Courses.ToListAsync();
+            courses.Add(new Course {ID=-1,CourseCode=-1, CourseName="None" });
             var student = await _context.Students.FindAsync(id);
             viewModel.Student = student;
             viewModel.Courses = courses;
@@ -127,11 +140,12 @@ namespace FaceAttendance.Controllers
             if(co != null)
             {
                 Course courseName = await _context.Courses.FindAsync(co.CourseID);
+                
                 ViewData["Courses"] = new SelectList(courses, "ID", "CourseName", courseName.ID);
             }
             else
             {
-                ViewData["Courses"] = new SelectList(courses, "ID", "CourseName");
+                ViewData["Courses"] = new SelectList(courses, "ID", "CourseName",-1);
             }
 
 
@@ -162,27 +176,41 @@ namespace FaceAttendance.Controllers
             {
                 try
                 {
-
-                    _context.Update(student);
-                    var result = await _context.CourseLists.Where(x => x.StudentID == student.ID).ToListAsync();
-                    if (result.Count < 1)
+                    if (selectCourse != -1)
                     {
-                        CourseList course = new CourseList();
-                        course.StudentID = student.ID;
-                        course.CourseID = selectCourse;
-                        _context.CourseLists.Add(course);
+                        _context.Update(student);
+                        var result = await _context.CourseLists.Where(x => x.StudentID == student.ID).ToListAsync();
+                        if (result.Count < 1)
+                        {
+                            CourseList course = new CourseList();
+                            course.StudentID = student.ID;
+                            course.CourseID = selectCourse;
+                            _context.CourseLists.Add(course);
+                        }
+                        else
+                        {
+                            var co = (from c in _context.CourseLists
+                                      where c.StudentID == student.ID
+                                      select c).Single();
+                            co.CourseID = selectCourse;
+                        }
+
+
+
+
+                        await _context.SaveChangesAsync();
                     }
                     else
                     {
-                        var co = (from c in _context.CourseLists
-                                  where c.StudentID == student.ID
-                                  select c).Single();
-                        co.CourseID = selectCourse;
+                        var result = await _context.CourseLists.Where(x => x.StudentID == student.ID).ToListAsync();
+                        if(result != null)
+                        {
+                            _context.CourseLists.Remove(result[0]);
+                            await _context.SaveChangesAsync();
+                        }
+                        
+
                     }
-                    
-
-
-                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
