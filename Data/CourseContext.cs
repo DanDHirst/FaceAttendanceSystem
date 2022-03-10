@@ -1,4 +1,5 @@
 ﻿using FaceAttendance.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FaceAttendance.Data
 {
-    public class CourseContext : DbContext
+    public class CourseContext : IdentityDbContext<AppUser,AppRole,int>
     {
         public CourseContext(DbContextOptions<CourseContext> options) : base(options)
         {

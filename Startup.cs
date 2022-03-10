@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using FaceAttendance.Models;
 
 namespace FaceAttendance
 {
@@ -28,7 +29,13 @@ namespace FaceAttendance
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<CourseContext>(options =>
+
+
+            services.AddIdentity<AppUser, AppRole>(options => { options.User.RequireUniqueEmail = true; }).AddEntityFrameworkStores<CourseContext>();
+       
+        
+
+        services.AddDbContext<CourseContext>(options =>
        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
 
