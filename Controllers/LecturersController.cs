@@ -33,6 +33,7 @@ namespace FaceAttendance.Controllers
                 return NotFound();
             }
 
+            
             var lecturer = await _context.Lecturers
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (lecturer == null)

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FaceAttendance.Data
 {
-    public class CourseContext : IdentityDbContext<AppUser,AppRole,int>
+    public class CourseContext : IdentityDbContext<AppUser,AppRole,string>
     {
         public CourseContext(DbContextOptions<CourseContext> options) : base(options)
         {

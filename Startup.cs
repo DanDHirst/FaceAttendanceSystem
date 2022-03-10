@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using FaceAttendance.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace FaceAttendance
 {
@@ -29,13 +30,14 @@ namespace FaceAttendance
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddRazorPages();
 
 
-            services.AddIdentity<AppUser, AppRole>(options => { options.User.RequireUniqueEmail = true; }).AddEntityFrameworkStores<CourseContext>();
-       
-        
+            services.AddIdentity<AppUser, AppRole>(options => { options.User.RequireUniqueEmail = true; }).AddDefaultUI().AddEntityFrameworkStores<CourseContext>().AddTokenProvider<DataProtectorTokenProvider<AppUser>>(TokenOptions.DefaultProvider);
 
-        services.AddDbContext<CourseContext>(options =>
+
+
+            services.AddDbContext<CourseContext>(options =>
        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
 
@@ -59,13 +61,17 @@ namespace FaceAttendance
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapRazorPages();
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                
             });
+            
         }
     }
 }
