@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-namespace FaceAttendance.Areas.Identity.Pages.Account.Manage
+namespace FaceAttendance.Areas.Identity.Pages.Account
 {
     public class ChangePasswordModel : PageModel
     {
