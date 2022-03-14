@@ -1,9 +1,15 @@
 ﻿@model IEnumerable<FaceAttendance.Models.Lecturer>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+
 
 @{
+    var user = await UserManager.GetUserAsync(User);
+    var userRole = user?.UserRole;
     ViewData["Title"] = "Index";
 }
-    <partial name="_AdminPartial" />
+<partial name="_AdminAndLecturerPartial" />
 <h1>Index</h1>
 
 <p>
@@ -22,20 +28,26 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.LecturerCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LecturerName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LecturerCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LecturerName)
+                </td>
+                <td>
+                    @if (userRole == "Admin")
+                    {
+
+
+                    <a asp-action="Edit" id="Edit" asp-route-id="@item.ID">Edit</a> 
+                    <a asp-action="Delete" id="Delete" asp-route-id="@item.ID">Delete</a>
+                    }
+                    <a asp-action="Details" id="Details" asp-route-id="@item.ID">Details</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
