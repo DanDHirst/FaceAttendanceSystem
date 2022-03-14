@@ -1,9 +1,15 @@
 ﻿@model IEnumerable<FaceAttendance.Models.Student>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+
 
 @{
+    var user = await UserManager.GetUserAsync(User);
+    var userRole = user?.UserRole;
     ViewData["Title"] = "Index";
 }
-
+<partial name="_AdminAndLecturerPartial" />
 <h1>Students</h1>
 
 <p>
@@ -28,27 +34,35 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td id="StudentCode">
-                @Html.DisplayFor(modelItem => item.StudentCode)
-            </td>
-            <td id="StudentName">
-                @Html.DisplayFor(modelItem => item.StudentName)
-            </td>
-            <td id="Image">
-                <img src=@Html.DisplayFor(modelItem => item.imageUrl) width="100" height="100" alt="StudentPhoto">
-                
-            </td>
-            <td id="Active">
-                @Html.DisplayFor(modelItem => item.active)
-            </td>
-            <td id="StudentManagement">
-                <a asp-action="Edit" asp-route-id="@item.ID" id="EditStudent">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID" id="ViewStudent">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID" id="DeleteStudent">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td id="StudentCode">
+                    @Html.DisplayFor(modelItem => item.StudentCode)
+                </td>
+                <td id="StudentName">
+                    @Html.DisplayFor(modelItem => item.StudentName)
+                </td>
+                <td id="Image">
+                    <img src=@Html.DisplayFor(modelItem => item.imageUrl) width="100" height="100" alt="StudentPhoto">
+
+                </td>
+                <td id="Active">
+                    @Html.DisplayFor(modelItem => item.active)
+                </td>
+                <td id="StudentManagement">
+
+
+                    @if (userRole == "Admin")
+                    {
+
+
+                        <a asp-action="Edit" id="EditStudent" asp-route-id="@item.ID">Edit</a>
+                        <a asp-action="Delete" id="DeleteStudent" asp-route-id="@item.ID">Delete</a>
+                    }
+                    <a asp-action="Details" id="ViewStudent" asp-route-id="@item.ID">Details</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

@@ -6,6 +6,11 @@ describe('Module Test', () => {
     })
     beforeEach(() => {
         //navigate to bus tracker page
+        
+        cy.visit('https://faceattendance.azurewebsites.net/Modules')
+        cy.get('#Input_Email').type('admin@123.com')
+        cy.get('#Input_Password').type('Password123!')
+        cy.get('.btn').click()
         cy.visit('https://faceattendance.azurewebsites.net/Modules')
     })
     after(() => {
