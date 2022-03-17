@@ -47,8 +47,9 @@ while True:
         import requests
         #sudo pip3 install requests
         room = 'bgb102'
-        testUrl = "https://localhost:44358/api/registeredStudents?filename="+filename+"&room="+room+""
-        url = "https://faceattendance.azurewebsites.net/api/registeredStudents?filename="+filename+"&room="+room+""
+        auth = "1297"
+        testUrl = "https://localhost:44358/api/registeredStudents?filename="+filename+"&room="+room+"&auth="+auth+""
+        url = "https://faceattendance.azurewebsites.net/api/registeredStudents?filename="+filename+"&room="+room+"&auth="+auth+""
 
         x = requests.post(url)
         #x = requests.post(testUrl , verify= False)

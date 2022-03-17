@@ -15,6 +15,7 @@ namespace FaceAttendance.Controllers
     public class APICourseListsController : ControllerBase
     {
         private readonly CourseContext _context;
+        private string _auth = Constants.AUTH;
 
         public APICourseListsController(CourseContext context)
         {
@@ -23,15 +24,28 @@ namespace FaceAttendance.Controllers
 
         // GET: api/APICourseLists
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CourseList>>> GetCourseLists()
+        public async Task<ActionResult<IEnumerable<CourseList>>> GetCourseLists( string auth)
         {
+            
+            if (auth != _auth)
+            {
+
+                return BadRequest("Invalid auth token");
+            }
             return await _context.CourseLists.ToListAsync();
         }
 
         // GET: api/APICourseLists/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CourseList>> GetCourseList(int id)
+        public async Task<ActionResult<CourseList>> GetCourseList(int id, string auth)
         {
+
+            if (auth != _auth)
+            {
+
+                return BadRequest("Invalid auth token");
+            }
+
             var courseList = await _context.CourseLists.FindAsync(id);
 
             if (courseList == null)
@@ -46,8 +60,14 @@ namespace FaceAttendance.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCourseList(int id, CourseList courseList)
+        public async Task<IActionResult> PutCourseList(int id, CourseList courseList, string auth)
         {
+            if (auth != _auth)
+            {
+
+                return BadRequest("Invalid auth token");
+            }
+
             if (id != courseList.ID)
             {
                 return BadRequest();
@@ -78,8 +98,13 @@ namespace FaceAttendance.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<CourseList>> PostCourseList(CourseList courseList)
+        public async Task<ActionResult<CourseList>> PostCourseList(CourseList courseList, string auth)
         {
+            if (auth != _auth)
+            {
+
+                return BadRequest("Invalid auth token");
+            }
             _context.CourseLists.Add(courseList);
             await _context.SaveChangesAsync();
 
@@ -88,8 +113,13 @@ namespace FaceAttendance.Controllers
 
         // DELETE: api/APICourseLists/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<CourseList>> DeleteCourseList(int id)
+        public async Task<ActionResult<CourseList>> DeleteCourseList(int id, string auth)
         {
+            if (auth != _auth)
+            {
+
+                return BadRequest("Invalid auth token");
+            }
             var courseList = await _context.CourseLists.FindAsync(id);
             if (courseList == null)
             {

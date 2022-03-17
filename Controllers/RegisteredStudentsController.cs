@@ -18,6 +18,7 @@ namespace FaceAttendance.Controllers
     public class RegisteredStudentsController : ControllerBase
     {
         private readonly CourseContext _context;
+        private string _auth = Constants.AUTH;
 
         public RegisteredStudentsController(CourseContext context)
         {
@@ -25,6 +26,7 @@ namespace FaceAttendance.Controllers
         }
         public async Task<List<Student>> GetStudentsAsync(int? id)
         {
+            
             //find all the students attached to this class
             //get find moduleID
             Class cla = await _context.Classes.FindAsync(id);
@@ -52,15 +54,25 @@ namespace FaceAttendance.Controllers
 
         // GET: api/RegisteredStudents
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RegisteredStudent>>> GetRegisteredStudents()
+        public async Task<ActionResult<IEnumerable<RegisteredStudent>>> GetRegisteredStudents(string auth)
         {
+            if (auth != _auth)
+            {
+
+                return BadRequest("Invalid auth token");
+            }
             return await _context.RegisteredStudents.ToListAsync();
         }
 
         // GET: api/RegisteredStudents/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<RegisteredStudent>> GetRegisteredStudent(int id)
+        public async Task<ActionResult<RegisteredStudent>> GetRegisteredStudent(int id, string auth)
         {
+            if (auth != _auth)
+            {
+
+                return BadRequest("Invalid auth token");
+            }
             var registeredStudent = await _context.RegisteredStudents.FindAsync(id);
 
             if (registeredStudent == null)
@@ -75,8 +87,13 @@ namespace FaceAttendance.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRegisteredStudent(int id, RegisteredStudent registeredStudent)
+        public async Task<IActionResult> PutRegisteredStudent(int id, RegisteredStudent registeredStudent, string auth)
         {
+            if (auth != _auth)
+            {
+
+                return BadRequest("Invalid auth token");
+            }
             if (id != registeredStudent.ID)
             {
                 return BadRequest();
@@ -107,8 +124,13 @@ namespace FaceAttendance.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<ImageDetails>> PostRegisteredStudent(string filename, string room)
+        public async Task<ActionResult<ImageDetails>> PostRegisteredStudent(string filename, string room, string auth)
         {
+            if (auth != _auth)
+            {
+
+                return BadRequest("Invalid auth token");
+            }
 
             const string IMAGE_BASE_URL = Constants.IMAGE_BASE_URL;
             const string IMAGE_NEW_URL = Constants.IMAGE_NEW_URL;
@@ -176,8 +198,13 @@ namespace FaceAttendance.Controllers
        
         // DELETE: api/RegisteredStudents/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<RegisteredStudent>> DeleteRegisteredStudent(int id)
+        public async Task<ActionResult<RegisteredStudent>> DeleteRegisteredStudent(int id, string auth)
         {
+            if (auth != _auth)
+            {
+
+                return BadRequest("Invalid auth token");
+            }
             var registeredStudent = await _context.RegisteredStudents.FindAsync(id);
             if (registeredStudent == null)
             {

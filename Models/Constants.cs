@@ -13,6 +13,7 @@ namespace FaceAttendance.Models
         public const string ENDPOINT = "https://uksouth.api.cognitive.microsoft.com/";
         public static string _connectionString =
             "DefaultEndpointsProtocol=https;AccountName=faceattendimages;AccountKey=g1VnlmiQ8ChdJluUaPpoOAHtk1WD/CpcNjzTuBKS3P8PekttQvm46jhhRGyG/e3meS7fB/W4AP8+ftjcDNAq+A==;EndpointSuffix=core.windows.net";
+        public static string AUTH = "1297";
 
     }
 }

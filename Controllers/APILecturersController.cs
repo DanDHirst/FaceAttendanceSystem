@@ -15,6 +15,7 @@ namespace FaceAttendance.Controllers
     public class APILecturersController : ControllerBase
     {
         private readonly CourseContext _context;
+        private string _auth = Constants.AUTH;
 
         public APILecturersController(CourseContext context)
         {
@@ -23,15 +24,25 @@ namespace FaceAttendance.Controllers
 
         // GET: api/APILecturers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Lecturer>>> GetLecturers()
+        public async Task<ActionResult<IEnumerable<Lecturer>>> GetLecturers(string auth)
         {
+            if (auth != _auth)
+            {
+
+                return BadRequest("Invalid auth token");
+            }
             return await _context.Lecturers.ToListAsync();
         }
 
         // GET: api/APILecturers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Lecturer>> GetLecturer(int id)
+        public async Task<ActionResult<Lecturer>> GetLecturer(int id, string auth)
         {
+            if (auth != _auth)
+            {
+
+                return BadRequest("Invalid auth token");
+            }
             var lecturer = await _context.Lecturers.FindAsync(id);
 
             if (lecturer == null)
@@ -46,8 +57,13 @@ namespace FaceAttendance.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutLecturer(int id, Lecturer lecturer)
+        public async Task<IActionResult> PutLecturer(int id, Lecturer lecturer, string auth)
         {
+            if (auth != _auth)
+            {
+
+                return BadRequest("Invalid auth token");
+            }
             if (id != lecturer.ID)
             {
                 return BadRequest();
@@ -78,8 +94,13 @@ namespace FaceAttendance.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Lecturer>> PostLecturer(Lecturer lecturer)
+        public async Task<ActionResult<Lecturer>> PostLecturer(Lecturer lecturer, string auth)
         {
+            if (auth != _auth)
+            {
+
+                return BadRequest("Invalid auth token");
+            }
             _context.Lecturers.Add(lecturer);
             await _context.SaveChangesAsync();
 
@@ -88,8 +109,13 @@ namespace FaceAttendance.Controllers
 
         // DELETE: api/APILecturers/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Lecturer>> DeleteLecturer(int id)
+        public async Task<ActionResult<Lecturer>> DeleteLecturer(int id, string auth)
         {
+            if (auth != _auth)
+            {
+
+                return BadRequest("Invalid auth token");
+            }
             var lecturer = await _context.Lecturers.FindAsync(id);
             if (lecturer == null)
             {

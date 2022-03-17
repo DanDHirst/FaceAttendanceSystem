@@ -15,6 +15,7 @@ namespace FaceAttendance.Controllers
     public class APIModulesController : ControllerBase
     {
         private readonly CourseContext _context;
+        private string _auth = Constants.AUTH;
 
         public APIModulesController(CourseContext context)
         {
@@ -23,15 +24,25 @@ namespace FaceAttendance.Controllers
 
         // GET: api/APIModules
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Module>>> GetModules()
+        public async Task<ActionResult<IEnumerable<Module>>> GetModules(string auth)
         {
+            if (auth != _auth)
+            {
+
+                return BadRequest("Invalid auth token");
+            }
             return await _context.Modules.ToListAsync();
         }
 
         // GET: api/APIModules/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Module>> GetModule(int id)
+        public async Task<ActionResult<Module>> GetModule(int id, string auth)
         {
+            if (auth != _auth)
+            {
+
+                return BadRequest("Invalid auth token");
+            }
             var @module = await _context.Modules.FindAsync(id);
 
             if (@module == null)
@@ -46,8 +57,13 @@ namespace FaceAttendance.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutModule(int id, Module @module)
+        public async Task<IActionResult> PutModule(int id, Module @module, string auth)
         {
+            if (auth != _auth)
+            {
+
+                return BadRequest("Invalid auth token");
+            }
             if (id != @module.ID)
             {
                 return BadRequest();
@@ -78,8 +94,13 @@ namespace FaceAttendance.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Module>> PostModule(Module @module)
+        public async Task<ActionResult<Module>> PostModule(Module @module, string auth)
         {
+            if (auth != _auth)
+            {
+
+                return BadRequest("Invalid auth token");
+            }
             _context.Modules.Add(@module);
             await _context.SaveChangesAsync();
 
@@ -88,8 +109,13 @@ namespace FaceAttendance.Controllers
 
         // DELETE: api/APIModules/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Module>> DeleteModule(int id)
+        public async Task<ActionResult<Module>> DeleteModule(int id, string auth)
         {
+            if (auth != _auth)
+            {
+
+                return BadRequest("Invalid auth token");
+            }
             var @module = await _context.Modules.FindAsync(id);
             if (@module == null)
             {
