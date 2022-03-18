@@ -56,7 +56,18 @@ namespace FaceAttendance.Controllers
             {
                  courseName = await _context.Courses.FindAsync(co.CourseID);
             }
+
+            //find student attendance
+            var Registered = (from a in _context.RegisteredStudents where a.StudentID == id select a).ToList();
             
+            foreach (RegisteredStudent r in Registered)
+            {
+                r.Class = await _context.Classes.FindAsync(r.ClassID);
+                r.Class.Module = await _context.Modules.FindAsync(r.Class.ModuleID);
+            }
+
+            ViewData["Registered"] = Registered;
+
 
             ViewData["Course"] = courseName;
 
