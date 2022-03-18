@@ -36,6 +36,7 @@
         </dd>
         @{
             var course = (Course)ViewData["Course"];
+            var Registered = (List<RegisteredStudent>)ViewData["Registered"];
         }
         @if (course != null)
         {
@@ -48,6 +49,46 @@
         }
 
     </dl>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Module name 
+                </th>
+                <th>
+                    Class time 
+                </th>
+                <th>
+                    room
+                </th>
+                <th>
+                    Time Registered
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Registered)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Class.Module.ModuleName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Class.StartDateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Class.Room)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegisteredTime)
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
