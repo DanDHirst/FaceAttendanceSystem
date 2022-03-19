@@ -246,6 +246,12 @@ namespace FaceAttendance.Controllers
                 RegisteredTime = DateTime.Now,
             };
 
+            var checkReg = (from r in _context.RegisteredStudents where r.ClassID == rs.ClassID && r.StudentID == rs.StudentID select r).ToList();
+            if (checkReg.Count > 0)
+            {
+                return RedirectToAction(nameof(Details), new { id });
+            }
+
             _context.RegisteredStudents.Add(rs);
             await _context.SaveChangesAsync();
 
@@ -333,9 +339,14 @@ namespace FaceAttendance.Controllers
           
                 
             };
+            var checkReg =  (from r in _context.RegisteredStudents where r.ClassID == rs.ClassID && r.StudentID == rs.StudentID select r).ToList();
+            if (checkReg.Count < 1)
+            {
+                _context.RegisteredStudents.Add(rs);
+                await _context.SaveChangesAsync();
+            }
 
-            _context.RegisteredStudents.Add(rs);
-            await _context.SaveChangesAsync();
+            
 
             var registeredStudents = (from s in _context.RegisteredStudents where s.ClassID == id select s).ToList();
 

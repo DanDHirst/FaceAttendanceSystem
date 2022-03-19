@@ -189,6 +189,13 @@ namespace FaceAttendance.Controllers
 
             };
 
+            //check if student already registered 
+            var checkReg = (from r in _context.RegisteredStudents where r.ClassID == rs.ClassID && r.StudentID == rs.StudentID select r).ToList();
+            if (checkReg.Count > 0)
+            {
+                return (matchedImage);
+            }
+
             _context.RegisteredStudents.Add(rs);
             await _context.SaveChangesAsync();
 
@@ -211,6 +218,7 @@ namespace FaceAttendance.Controllers
                 return NotFound();
             }
 
+            
             _context.RegisteredStudents.Remove(registeredStudent);
             await _context.SaveChangesAsync();
 
