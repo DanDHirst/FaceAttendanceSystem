@@ -65,6 +65,72 @@ namespace FaceAttendance.Controllers
                 r.Class = await _context.Classes.FindAsync(r.ClassID);
                 r.Class.Module = await _context.Modules.FindAsync(r.Class.ModuleID);
             }
+            //find total classes that are available for the student
+            List<CourseList> course = await (from c in _context.CourseLists where c.StudentID == id select c).ToListAsync();
+            //
+            ViewData["classesMissed"] = null;
+            ViewData["classesAttended"] = null;
+            ViewData["totalClassesMissed"] = 0;
+            ViewData["totalClasses"] = 0;
+            ViewData["percentage"] = 0;
+            if ( course.Count > 0)
+            {
+                var modlist = (from m in _context.ModuleLists where course[0].ID == m.CourseID select m).ToList();
+                List<Module> modules = new List<Module>();
+                foreach (var m in modlist)
+                {
+                    modules.Add((from mo in _context.Modules where mo.ID == m.ModuleID select mo).Single());
+
+                }
+                List<Class> classesAttended = new List<Class>();
+                List<Class> classesMissed = new List<Class>();
+                var totalClassesMissed = 0;
+                foreach (var m in modules)
+                {
+                    var cl = ((from c in _context.Classes where c.ModuleID == m.ID select c).ToList());
+                    foreach(var cla in cl)
+                    {
+                        
+                        if(cla.EndDateTime < DateTime.Now){
+                            cla.Module = (from mods in _context.Modules where mods.ID == cla.ModuleID select mods).SingleOrDefault();
+                            var registered = (from r in _context.RegisteredStudents where r.StudentID == id && r.ClassID == cla.ID select r).ToList();
+                            if(registered.Count < 1)
+                            {
+                                totalClassesMissed += 1;
+                                classesMissed.Add(cla);
+                            }
+                            else
+                            {
+                                classesAttended.Add(cla);
+                            }
+                            
+                        }
+                    }
+                }
+                ViewData["classesMissed"] = classesMissed;
+                ViewData["classesAttended"] = classesAttended;
+                ViewData["totalClassesMissed"] = totalClassesMissed;
+                ViewData["totalClasses"] = classesAttended.Count + classesMissed.Count;
+
+                double percentage = 0;
+                double totalClasses = (classesAttended.Count + classesMissed.Count);
+                double classesAtteneded = classesAttended.Count;
+                percentage = classesAtteneded / totalClasses;
+
+                
+                percentage = percentage *100;
+                ViewData["percentage"] = percentage;
+
+
+
+
+
+
+
+
+            }
+
+           
 
             ViewData["Registered"] = Registered;
 

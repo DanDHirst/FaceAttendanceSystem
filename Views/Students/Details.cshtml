@@ -37,7 +37,27 @@
         @{
             var course = (Course)ViewData["Course"];
             var Registered = (List<RegisteredStudent>)ViewData["Registered"];
+            var classesMissed = (List<Class>)ViewData["classesMissed"];
+            var classesAttended = (List<Class>)ViewData["classesAttended"];
+            int totalClassesMissed = (int)ViewData["totalClassesMissed"];
+            int totalClasses = (int)ViewData["totalClasses"];
+            
+
+            var percentage =ViewData["percentage"];
+            
+
+            
+
+
         }
+        <dt class="col-sm-2">
+            percentage attended
+        </dt>
+        <dd class="col-sm-10">
+            <text>@percentage</text>%
+        </dd>
+
+
         @if (course != null)
         {
             <dt class="col-sm-2">
@@ -49,16 +69,93 @@
         }
 
     </dl>
-
-
+    <h1> Classes Missed</h1>
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    Module name 
+                    Module name
                 </th>
                 <th>
-                    Class time 
+                    Class time
+                </th>
+                <th>
+                    room
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (classesMissed != null)
+            {
+            @foreach (var item in classesMissed)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Module.ModuleName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDateTime) - @Html.DisplayFor(modelItem => item.EndDateTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Room)
+                    </td>
+
+                </tr>
+            }
+            }
+        </tbody>
+    </table>
+
+    <h1> Classes Attended</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Module name
+                </th>
+                <th>
+                    Class time
+                </th>
+                <th>
+                    room
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (classesAttended != null)
+            {
+                @foreach (var item in classesAttended)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Module.ModuleName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StartDateTime) - @Html.DisplayFor(modelItem => item.EndDateTime)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Room)
+                        </td>
+
+                    </tr>
+                }
+            }
+            </tbody>
+    </table>
+
+
+
+
+    @*<table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Module name
+                </th>
+                <th>
+                    Class time
                 </th>
                 <th>
                     room
@@ -72,23 +169,23 @@
         <tbody>
             @foreach (var item in Registered)
             {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Class.Module.ModuleName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Class.StartDateTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Class.Room)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RegisteredTime)
-                </td>
-            </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Class.Module.ModuleName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Class.StartDateTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Class.Room)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RegisteredTime)
+                    </td>
+                </tr>
             }
         </tbody>
-    </table>
+    </table>*@
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
