@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FaceAttendance.Data;
 using FaceAttendance.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace FaceAttendance.Controllers
 {
     public class LecturersController : Controller
     {
         private readonly CourseContext _context;
+        private readonly UserManager<AppUser> _userManager;
 
-        public LecturersController(CourseContext context)
+        public LecturersController(CourseContext context, UserManager<AppUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Lecturers
@@ -149,6 +152,33 @@ namespace FaceAttendance.Controllers
         private bool LecturerExists(int id)
         {
             return _context.Lecturers.Any(e => e.ID == id);
+        }
+
+        public async Task<IActionResult> Dashboard()
+        {
+            
+            var user = await _userManager.GetUserAsync(User);
+            var userRole = user?.UserRole;
+            if (user == null || userRole != "Lecturer" ){
+                return BadRequest();
+            }
+
+
+            //find code of the lecturer called lastname on appuser
+            var lecturer = (from l in _context.Lecturers where l.LecturerCode.ToString() == user.Lastname select l).FirstOrDefault();
+
+
+            //find the lecturer from list 
+
+            //find classes that the lecturer has
+
+
+            //sort them by upcoming and completed
+
+
+            //output classes using viewdata
+
+            return View();
         }
     }
 }
