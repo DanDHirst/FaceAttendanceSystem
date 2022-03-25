@@ -5,10 +5,95 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@{
+    var Completed = (List<Class>)ViewData["Completed"];
+    var Upcoming = (List<Class>)ViewData["Upcoming"];
+}
 <h1>Dashboard</h1>
 
 <h1>Upcoming classes</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Module name
+            </th>
+            <th>
+                Class time
+            </th>
+            <th>
+                room
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Upcoming != null)
+        {
+            @foreach (var item in Upcoming)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Module.ModuleName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDateTime) - @Html.DisplayFor(modelItem => item.EndDateTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Room)
+                    </td>
+                    <td>
+                        @{ var ClassDetails = "/Classes/Details/" + item.ID;
+                        }
+                        <a href=@ClassDetails id="ClassDetails">Details</a>
+                    </td>
 
+                </tr>
+            }
+        }
+    </tbody>
+</table>
 
 
 <h1>Classes in the past</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Module name
+            </th>
+            <th>
+                Class time
+            </th>
+            <th>
+                room
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Completed != null)
+        {
+            @foreach (var item in Completed)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Module.ModuleName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDateTime) - @Html.DisplayFor(modelItem => item.EndDateTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Room)
+                    </td>
+                    
+                    <td>
+                        @{ var ClassDetails = "/Classes/Details/" + item.ID;
+                        }
+                        <a href=@ClassDetails id="ClassDetails">Details</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
