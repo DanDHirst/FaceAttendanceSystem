@@ -21,12 +21,20 @@ namespace FaceAttendance.Controllers
 
         // GET: Courses
         public async Task<IActionResult> Index()
-        {
-
-           
-
-            
+        {  
             return View(await _context.Courses.ToListAsync());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(int courseCode)
+        {
+            if (courseCode == 0)
+            {
+                return View(await _context.Courses.ToListAsync());
+            }
+            var courses = await (from c in _context.Courses where c.CourseCode == courseCode select c).ToListAsync();
+            return View(courses);
         }
 
         // GET: Courses/Details/5

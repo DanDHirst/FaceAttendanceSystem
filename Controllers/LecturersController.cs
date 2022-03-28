@@ -27,6 +27,17 @@ namespace FaceAttendance.Controllers
         {
             return View(await _context.Lecturers.ToListAsync());
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(int lecturerCode)
+        {
+            if(lecturerCode == 0)
+            {
+                return View(await _context.Lecturers.ToListAsync());
+            }
+            var lecturer = await (from l in _context.Lecturers where l.LecturerCode == lecturerCode select l).ToListAsync();
+            return View(lecturer);
+        }
 
         // GET: Lecturers/Details/5
         public async Task<IActionResult> Details(int? id)
