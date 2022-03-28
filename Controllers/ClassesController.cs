@@ -29,8 +29,14 @@ namespace FaceAttendance.Controllers
         // GET: Classes
         public async Task<IActionResult> Index()
         {
-            var courseContext = _context.Classes;
-            return View(await courseContext.ToListAsync());
+            
+            var courses = await _context.Classes.ToListAsync();
+            foreach(var c in courses)
+            {
+                c.Lecturer = (from l in _context.Lecturers where c.LecturerID == l.ID select l).First();
+                c.Module = (from m in _context.Modules where m.ID == c.ModuleID select m).First();
+            }
+            return View(courses);
         }
         public async Task<List<Student>> GetStudentsAsync(int? id)
         {
