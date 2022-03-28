@@ -15,6 +15,12 @@
 <p>
     <a asp-action="Create" id="CreateStudent">Create New Student</a>
 </p>
+<form asp-action="Index">
+    <label for="SearchStudentCode" class="control-label">Search Student Code</label>
+    <input id="SearchStudentCode" name="studentcode" placeholder="1232" type="number">
+    <button>Search</button>
+</form>
+
 <table class="table">
     <thead>
         <tr>

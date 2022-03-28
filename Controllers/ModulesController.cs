@@ -25,6 +25,19 @@ namespace FaceAttendance.Controllers
             return View(await _context.Modules.ToListAsync());
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(string moduleCode)
+        {
+            if (moduleCode == null || moduleCode == "")
+            {
+                return View(await _context.Modules.ToListAsync());
+            }
+            var modules = await (from m in _context.Modules where m.ModuleCode == moduleCode select m).ToListAsync();
+            return View(modules);
+        }
+
+
         // GET: Modules/Details/5
         public async Task<IActionResult> Details(int? id)
         {

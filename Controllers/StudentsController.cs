@@ -32,6 +32,19 @@ namespace FaceAttendance.Controllers
         {
             return View(await _context.Students.ToListAsync());
         }
+        // post: search Students
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(int studentcode)
+        {
+            if(studentcode == 0)
+            {
+                return View(await _context.Students.ToListAsync());
+            }
+            var students = await (from s in _context.Students where s.StudentCode == studentcode select s).ToListAsync();
+            return View(students);
+        }
+
 
         // GET: Students/Details/5
         public async Task<IActionResult> Details(int? id)

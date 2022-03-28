@@ -57,10 +57,10 @@
                     @Html.DisplayFor(modelItem => item.EndDateTime)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Lecturer.ID)
+                    @Html.DisplayFor(modelItem => item.Lecturer.LecturerName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Module.ID)
+                    @Html.DisplayFor(modelItem => item.Module.ModuleCode)
                 </td>
                 <td>
                     @if (userRole == "Admin")
