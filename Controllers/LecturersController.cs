@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FaceAttendance.Data;
 using FaceAttendance.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace FaceAttendance.Controllers
 {
     public class LecturersController : Controller
     {
         private readonly CourseContext _context;
+        private readonly UserManager<AppUser> _userManager;
 
-        public LecturersController(CourseContext context)
+        public LecturersController(CourseContext context, UserManager<AppUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Lecturers
@@ -149,6 +152,40 @@ namespace FaceAttendance.Controllers
         private bool LecturerExists(int id)
         {
             return _context.Lecturers.Any(e => e.ID == id);
+        }
+
+        public async Task<IActionResult> Dashboard()
+        {
+            //find code of the lecturer called lastname on appuser
+            var user = await _userManager.GetUserAsync(User);
+            var userRole = user?.UserRole;
+            if (user == null || userRole != "Lecturer" ){
+                return BadRequest();
+            }
+
+            //find the lecturer from list 
+            var lecturer = (from l in _context.Lecturers where l.LecturerCode.ToString() == user.Lastname select l).FirstOrDefault();
+            if(lecturer == null)
+            {
+                return NotFound();
+            }
+            //find classes that the lecturer has
+            //sort them by upcoming and completed
+            var UpcomingClasses = (from c in _context.Classes where c.LecturerID == lecturer.ID && c.EndDateTime > DateTime.Now select c).ToList();
+            foreach(var c in UpcomingClasses)
+            {
+                c.Module = (from m in _context.Modules where m.ID == c.ModuleID select m).FirstOrDefault();
+            }
+            var CompletedClasses = (from c in _context.Classes where c.LecturerID == lecturer.ID && c.EndDateTime < DateTime.Now select c).ToList();
+            foreach (var c in CompletedClasses)
+            {
+                c.Module = (from m in _context.Modules where m.ID == c.ModuleID select m).FirstOrDefault();
+            }
+
+            //output classes using viewdata
+            ViewData["Upcoming"] = UpcomingClasses;
+            ViewData["Completed"] = CompletedClasses;
+            return View();
         }
     }
 }
