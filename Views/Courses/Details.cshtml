@@ -64,8 +64,8 @@
                 </td>
                 <td>
                     @{ var ModuleDetails = "/Modules/Details/" + item.ID;
-                    }|
-                    <a href=@ModuleDetails id="ModuleDetails">Details</a> |
+                    }
+                    <a href=@ModuleDetails id="ModuleDetails" class="btn btn-primary">Details <i class="fa-solid fa-info"></i></a>
                     <form asp-action="RemoveModule">
                         <input type="hidden" asp-for="ID" />
                         <input type="hidden" name="moduleID" value="@item.ID" />
@@ -129,7 +129,7 @@
                 <td>
                     @{ var StudentDetails = "/Students/Details/" + item.ID;
                     }
-                    <a href=@StudentDetails id="StudentDetails">Details</a>
+                    <a href=@StudentDetails id="StudentDetails" class="btn btn-primary">Details <i class="fa-solid fa-info"></i></a>
                     <form asp-action="RemoveStudent">
                         <input type="hidden" asp-for="ID" />
                         <input type="hidden" name="studentID" value="@item.ID" />
