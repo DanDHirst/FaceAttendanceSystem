@@ -13,7 +13,7 @@
 <h1>Modules</h1>
 
 <p>
-    <a asp-action="Create" id="Create">Create New</a>
+    <a asp-action="Create" id="Create" class="btn btn-success">Create New Module <i class="fa-solid fa-plus"></i></a>
 </p>
 <form asp-action="Index">
     <label for="SearchModuleCode" class="control-label">Search Module Code</label>
@@ -43,14 +43,15 @@
                     @Html.DisplayFor(modelItem => item.ModuleCode)
                 </td>
                 <td>
+                    <a asp-action="Details" id="Details" asp-route-id="@item.ID" class="btn btn-primary">Details <i class="fa-solid fa-info"></i></a>
                     @if (userRole == "Admin")
                     {
 
 
-                        <a asp-action="Edit" id="Edit" asp-route-id="@item.ID">Edit</a>
-                        <a asp-action="Delete" id="Delete" asp-route-id="@item.ID">Delete</a>
+                        <a asp-action="Edit" id="Edit" asp-route-id="@item.ID" class="btn btn-info">Edit <i class="fa-solid fa-pen-to-square"></i></a>
+                        <a asp-action="Delete" id="Delete" asp-route-id="@item.ID" class="btn btn-danger">Delete <i class="fa-solid fa-trash-can"></i></a>
                     }
-                    <a asp-action="Details" id="Details" asp-route-id="@item.ID">Details</a>
+                    
                 </td>
             </tr>
         }
