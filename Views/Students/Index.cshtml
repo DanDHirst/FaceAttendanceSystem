@@ -56,7 +56,20 @@
             <th>
                 @Html.DisplayNameFor(model => model.active)
             </th>
-            <th></th>
+            <th>
+                <div class="form-inline" style="float: right">
+                <form method="get" class="form-inline">
+                    <button name="prevPage" class="btn btn-primary" value="-1"><</button>
+                    <input value="@ViewData["currentPage"]"   name="currentPage" hidden>
+                </form>
+                <h3 class="form-inline">&nbsp;&nbsp;  @ViewData["currentPage"] &nbsp;&nbsp; </h3>
+                
+                <form method="get" class="form-inline">
+                    <input value="@ViewData["currentPage"]" name="currentPage" hidden>
+                    <button name="nextPage"  class="btn btn-primary"  value="1">></button>
+                </form>
+                </div>
+            </th>
         </tr>
     </thead>
     <tbody>

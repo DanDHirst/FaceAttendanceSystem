@@ -28,9 +28,18 @@ namespace FaceAttendance.Controllers
 
 
         // GET: Students
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int currentPage,int prevPage, int nextPage)
         {
-            return View(await _context.Students.ToListAsync());
+            if(prevPage == -1 && currentPage > 0)
+            {
+                currentPage = currentPage - 1;
+            }
+            else if(nextPage == 1)
+            {
+                currentPage = currentPage +1;
+            }
+            ViewData["currentPage"] = currentPage;
+            return View(await _context.Students.Skip(currentPage * 10).Take(10).ToListAsync());
         }
         // post: search Students
         [HttpPost]
