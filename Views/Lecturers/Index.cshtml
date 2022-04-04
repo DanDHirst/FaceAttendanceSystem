@@ -15,11 +15,28 @@
 <p>
     <a asp-action="Create" class="btn btn-success">Create New Lecturer <i class="fa-solid fa-plus"></i></a>
 </p>
-<form asp-action="Index">
-    <label for="SearchLecturerCode" class="control-label">Search Lecturer Code</label>
-    <input id="SearchLecturerCode" name="lecturerCode" placeholder="12" type="number">
-    <button class="btn btn-primary">Search <i class="fa-solid fa-magnifying-glass"></i></button>
-</form>
+
+
+<div class="panel panel-info col-7">
+    <div class="panel-heading">Search Lecturers</div>
+    <div class="panel-body">
+        <form asp-action="Index">
+            <div class="col-7">
+                <label for="SearchLecturerCode" class="control-label">Search Lecturer Code</label>
+                <input id="SearchLecturerCode" class="form-control" value="@ViewData["lecturerCode"]" name="lecturerCode" placeholder="12" type="number">
+            </div>
+            <div class="col-7">
+                <label for="SearchLecturerName" class="control-label">Search Lecturer Name</label>
+                <input id="SearchLecturerName" class="form-control" value="@ViewData["lecturerName"]" name="lecturerName" placeholder="Matt" type="text">
+            </div>
+            <div class="col-7">
+                <button class="btn btn-primary form-control">Search <i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
 <table class="table">
     <thead>
         <tr>
