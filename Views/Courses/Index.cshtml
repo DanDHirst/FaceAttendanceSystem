@@ -18,8 +18,12 @@
 
 
 <div class="panel panel-info col-7">
-    <div class="panel-heading">Search Course</div>
-    <div class="panel-body">
+    <div class="panel-heading">
+        <a data-toggle="collapse" href="#collapse1">
+            <b>Search Courses </b> <i class="fa-solid fa-circle-chevron-down"></i>
+        </a>
+    </div>
+    <div class="panel-body panel-collapse collapse show" id="collapse1">
         <form asp-action="Index">
             <div class="col-7">
                 <label for="SearchCourseCode" class="control-label">Search Course Code</label>

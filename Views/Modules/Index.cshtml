@@ -17,8 +17,12 @@
 </p>
 
 <div class="panel panel-info col-7">
-    <div class="panel-heading">Search Modules</div>
-    <div class="panel-body">
+    <div class="panel-heading">
+        <a data-toggle="collapse" href="#collapse1">
+            <b>Search Modules </b> <i class="fa-solid fa-circle-chevron-down"></i>
+        </a>
+    </div>
+    <div class="panel-body panel-collapse collapse show" id="collapse1">
         <form asp-action="Index">
             <div class="col-7">
                 <label for="SearchModuleCode" class="control-label">Search Module Code</label>
