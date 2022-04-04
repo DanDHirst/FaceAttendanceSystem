@@ -35,14 +35,31 @@ namespace FaceAttendance.Controllers
         // post: search Students
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(int studentcode)
+        public async Task<IActionResult> Index(int studentcode, string studentname)
         {
-            if(studentcode == 0)
+            if(studentcode == 0 && studentname == null)
             {
                 return View(await _context.Students.ToListAsync());
             }
-            var students = await (from s in _context.Students where s.StudentCode == studentcode select s).ToListAsync();
-            return View(students);
+            
+            if (studentcode != 0 && studentname != null)
+            {
+                var s1 = await (from s in _context.Students where s.StudentCode == studentcode && s.StudentName.Contains(studentname) select s).ToListAsync();
+                return View(s1);
+            }
+            if(studentcode != 0)
+            {
+                var students = await (from s in _context.Students where s.StudentCode == studentcode select s).ToListAsync();
+                return View(students);
+            }
+            if(studentname != null)
+            {
+                var students = await (from s in _context.Students where s.StudentName.Contains(studentname) select s).ToListAsync();
+                return View(students);
+            }
+            return View(await _context.Students.ToListAsync());
+
+
         }
 
 
