@@ -23,11 +23,11 @@
         <form asp-action="Index">
             <div class="col-7">
                 <label for="SearchStudentCode" class="control-label">Search Student Code</label>
-                <input id="SearchStudentCode" class="form-control" name="studentcode" placeholder="1232" type="number">
+                <input id="SearchStudentCode" class="form-control" value="@ViewData["studentcode"]" name="studentcode" placeholder="1232" type="number">
             </div>
             <div class="col-7">
                 <label for="SearchStudentName" class="control-label">Search Student Name</label>
-                <input id="SearchStudentName" class="form-control" name="studentname" placeholder="Steve" type="text">
+                <input id="SearchStudentName" class="form-control" value="@ViewData["studentname"]" name="studentname" placeholder="Steve" type="text">
             </div>
             <div class="col-7">
                    <button class="btn btn-primary form-control">Search <i class="fa-solid fa-magnifying-glass"></i></button>

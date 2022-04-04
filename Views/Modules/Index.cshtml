@@ -15,11 +15,28 @@
 <p>
     <a asp-action="Create" id="Create" class="btn btn-success">Create New Module <i class="fa-solid fa-plus"></i></a>
 </p>
-<form asp-action="Index">
-    <label for="SearchModuleCode" class="control-label">Search Module Code</label>
-    <input id="SearchModuleCode" name="ModuleCode" placeholder="Comp20" type="text">
-    <button class="btn btn-primary">Search <i class="fa-solid fa-magnifying-glass"></i></button>
-</form>
+
+<div class="panel panel-info col-7">
+    <div class="panel-heading">Search Modules</div>
+    <div class="panel-body">
+        <form asp-action="Index">
+            <div class="col-7">
+                <label for="SearchModuleCode" class="control-label">Search Module Code</label>
+                <input id="SearchModuleCode" class="form-control" value="@ViewData["moduleCode"]" name="moduleCode" placeholder="Comp20" type="text">
+            </div>
+            <div class="col-7">
+                <label for="SearchModuleName" class="control-label">Search Module Name</label>
+                <input id="SearchModuleName" class="form-control" value="@ViewData["moduleName"]" name="moduleName" placeholder="Computing" type="text">
+            </div>
+            <div class="col-7">
+                <button class="btn btn-primary form-control">Search <i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
 <table class="table">
     <thead>
         <tr>

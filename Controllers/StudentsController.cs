@@ -37,7 +37,11 @@ namespace FaceAttendance.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(int studentcode, string studentname)
         {
-            if(studentcode == 0 && studentname == null)
+            if (studentcode != 0) { 
+                ViewData["studentcode"] = studentcode;
+            }
+            ViewData["studentname"] = studentname;
+            if (studentcode == 0 && studentname == null)
             {
                 return View(await _context.Students.ToListAsync());
             }
