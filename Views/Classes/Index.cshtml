@@ -18,6 +18,31 @@
 
 </p>
 
+<div class="panel panel-info col-7">
+    <div class="panel-heading">
+        <a data-toggle="collapse" href="#collapse1">
+            <b>Search Classes </b> <i class="fa-solid fa-circle-chevron-down"></i>
+        </a>
+    </div>
+    <div class="panel-body panel-collapse collapse show" id="collapse1">
+        <form asp-action="Index">
+            <div class="col-7">
+                <label for="SearchRoom" class="control-label">Search Room</label>
+                <input id="SearchRoom" class="form-control" value="@ViewData["room"]" name="room" placeholder="bgb100" type="text">
+            </div>
+            <div class="col-7">
+                <label for="SearchStartTime" class="control-label">Search Start Time</label>
+                <input id="SearchStartTime" class="form-control" value="@ViewData["startTime"]" name="startTime" type="datetime-local">
+            </div>
+            <div class="col-7">
+                <button class="btn btn-primary form-control">Search <i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+           
+
+        </form>
+    </div>
+</div>
+
 
 <table class="table">
     <thead>
