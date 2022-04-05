@@ -70,14 +70,37 @@ namespace FaceAttendance.Controllers
             }
 
             
-            var lecturer = await _context.Lecturers
+            var lecturers = await _context.Lecturers
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (lecturer == null)
+            if (lecturers == null)
             {
                 return NotFound();
             }
 
-            return View(lecturer);
+            var lecturer = (from l in _context.Lecturers where l.ID == id select l).FirstOrDefault();
+            if (lecturer == null)
+            {
+                return NotFound();
+            }
+            //find classes that the lecturer has
+            //sort them by upcoming and completed
+            var UpcomingClasses = (from c in _context.Classes where c.LecturerID == lecturer.ID && c.EndDateTime > DateTime.Now select c).ToList();
+            foreach (var c in UpcomingClasses)
+            {
+                c.Module = (from m in _context.Modules where m.ID == c.ModuleID select m).FirstOrDefault();
+            }
+            var CompletedClasses = (from c in _context.Classes where c.LecturerID == lecturer.ID && c.EndDateTime < DateTime.Now select c).ToList();
+            foreach (var c in CompletedClasses)
+            {
+                c.Module = (from m in _context.Modules where m.ID == c.ModuleID select m).FirstOrDefault();
+            }
+
+            //output classes using viewdata
+            ViewData["Upcoming"] = UpcomingClasses;
+            ViewData["Completed"] = CompletedClasses;
+
+
+            return View(lecturers);
         }
 
         // GET: Lecturers/Create

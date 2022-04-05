@@ -1,30 +1,134 @@
 ﻿@model FaceAttendance.Models.Lecturer
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Lecturer Details";
 }
-    <partial name="_AdminAndLecturerPartial" />
-<h1>Details</h1>
+<partial name="_AdminAndLecturerPartial" />
+<h1>Lecturer Details</h1>
 
+@{
+    var Completed = (List<Class>)ViewData["Completed"];
+    var Upcoming = (List<Class>)ViewData["Upcoming"];
+}
 <div>
-    <h4>Lecturer</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.LecturerCode)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.LecturerCode)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.LecturerName)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.LecturerName)
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <a data-toggle="collapse" href="#collapse1">
+            <h3>Upcoming classes</h3> <i class="fa-solid fa-circle-chevron-down"></i>
+        </a>
+    </div>
+
+    <div class="panel-body panel-collapse collapse show" id="collapse1">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Module name
+                    </th>
+                    <th>
+                        Class time
+                    </th>
+                    <th>
+                        room
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Upcoming != null)
+                {
+                    @foreach (var item in Upcoming)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Module.ModuleName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StartDateTime) - @Html.DisplayFor(modelItem => item.EndDateTime)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Room)
+                            </td>
+                            <td>
+                                @{ var ClassDetails = "/Classes/Details/" + item.ID;
+                                }
+                                <a href=@ClassDetails id="ClassDetails" class="btn btn-primary">Details <i class="fa-solid fa-info"></i></a>
+                            </td>
+
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        </div>
 </div>
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <a data-toggle="collapse" href="#collapse2">
+            <h3>Classes in the past</h3> <i class="fa-solid fa-circle-chevron-down"></i>
+        </a>
+    </div>
+
+    <div class="panel-body panel-collapse collapse show" id="collapse2">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Module name
+                    </th>
+                    <th>
+                        Class time
+                    </th>
+                    <th>
+                        room
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Completed != null)
+                {
+                    @foreach (var item in Completed)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Module.ModuleName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StartDateTime) - @Html.DisplayFor(modelItem => item.EndDateTime)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Room)
+                            </td>
+
+                            <td>
+                                @{ var ClassDetails = "/Classes/Details/" + item.ID;
+                                }
+                                <a href=@ClassDetails id="ClassDetails" class="btn btn-primary">Details <i class="fa-solid fa-info"></i></a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        </div>
+    </div>
+
