@@ -14,5 +14,21 @@
 <div class="row">
     <div class="col-lg-4"><button onclick="window.location.href='/Classes'" class="btn btn-primary btn-lg" style="width: 200px; height: 200px;" type="submit">Classes</button></div>
     <div class="col-lg-4"><button onclick="window.location.href='/Lecturers'" class="btn btn-primary btn-lg" style="width: 200px; height: 200px;" type="submit">Lecturers</button></div>
-    <div class="col-lg-4"><button onclick="window.location.href='/Accounts'" class="btn btn-primary btn-lg" style="width: 200px; height: 200px;" type="submit">AppUser</button></div>
+    @{
+
+        @using Microsoft.AspNetCore.Identity
+        @inject SignInManager<AppUser> SignInManager
+        @inject UserManager<AppUser> UserManager
+        var user = await UserManager.GetUserAsync(User);
+        var userRole = user?.UserRole;
+        if (userRole != "Admin")
+        {
+            <div class="col-lg-4"><button onclick="window.location.href='/Lecturers/dashboard'" class="btn btn-primary btn-lg" style="width: 200px; height: 200px;" type="submit">Dashboard</button></div>
+        }
+        else
+        {
+            <div class="col-lg-4"><button onclick="window.location.href='/AppUser'" class="btn btn-primary btn-lg" style="width: 200px; height: 200px;" type="submit">Accounts</button></div>
+        }
+    }
+    
 </div>
