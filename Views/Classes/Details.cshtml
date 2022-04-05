@@ -4,10 +4,9 @@
     ViewData["Title"] = "Details";
 }
 <partial name="_AdminAndLecturerPartial" />
-<h1>Details</h1>
+<h1>Class Details</h1>
 
 <div>
-    <h4>Class</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -58,84 +57,92 @@ Enter Student ID
     <div class="form-group">
         <input name="studentID" value="" placeholder="1043289" required />
         <input name="id" value="@Model.ID" hidden />
-        <button>
+        <button class="btn btn-success">
             Register Student
         </button>
     </div>
 </form>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <a data-toggle="collapse" href="#collapse1">
+            <h3>Students enroled on class</h3> <i class="fa-solid fa-circle-chevron-down"></i>
+        </a>
+    </div>
+    <div class="panel-body panel-collapse collapse show" id="collapse1">
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Student Code
+                    </th>
+                    <th>
+                        Student Name
+                    </th>
+                    <th>
+                        ImageUrl
+                    </th>
+                    <th>
+                        Active
+                    </th>
+                    <th>
+                        Registered
+                    </th>
+                    <th>
+                        Time Registered
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in students)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StudentCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StudentName)
+                        </td>
+                        <td>
+                            <img src=@Html.DisplayFor(modelItem => item.imageUrl) width="100" height="100">
 
-<h1>Students enroled on class</h1>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Student Code
-            </th>
-            <th>
-                Student Name
-            </th>
-            <th>
-                ImageUrl
-            </th>
-            <th>
-                Active
-            </th>
-            <th>
-                Registered
-            </th>
-            <th>
-                Time Registered
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in students)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StudentCode)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StudentName)
-                </td>
-                <td>
-                    <img src=@Html.DisplayFor(modelItem => item.imageUrl) width="100" height="100">
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.active)
+                        </td>
+                        <td>
+                            @foreach (var s in Registered)
+                            {
+                                @if (s.StudentID == item.ID)
+                                {<text>Yes</text>break;
+                            }
 
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.active)
-                </td>
-                <td>
-                    @foreach (var s in Registered)
-                    {
-                        @if (s.StudentID == item.ID)
-                        {<text>Yes</text>break;
-                    }
+                            }
+                        </td>
 
-                    }
-                </td>
+                        <td>
+                            @foreach (var s in Registered)
+                            {
+                                @if (s.StudentID == item.ID)
+                                {@Html.DisplayFor(modelItem => s.RegisteredTime)break;
+                            }
 
-                <td>
-                    @foreach (var s in Registered)
-                    {
-                        @if (s.StudentID == item.ID)
-                        {@Html.DisplayFor(modelItem => s.RegisteredTime)break;
-                    }
+                            }
+                        </td>
+                        <td>
+                            @{ var StudentDetails = "/Students/Details/" + item.ID;
+                            }
+                            <a href=@StudentDetails class="btn btn-primary">Details <i class="fa-solid fa-info"></i></a>
 
-                    }
-                </td>
-                <td>
-                    @{ var StudentDetails = "/Students/Details/" + item.ID;
-                    }
-                    <a href=@StudentDetails class="btn btn-primary">Details <i class="fa-solid fa-info"></i></a>
+                        </td>
 
-                </td>
-
-            </tr>
-        }
-    </tbody>
-</table>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
     <a asp-action="Index">Back to List</a>
