@@ -152,8 +152,8 @@ namespace FaceAttendance.Controllers
         // GET: Classes/Create
         public IActionResult Create()
         {
-            ViewData["LecturerID"] = new SelectList(_context.Lecturers, "ID", "ID");
-            ViewData["ModuleID"] = new SelectList(_context.Modules, "ID", "ID");
+            ViewData["LecturerID"] = new SelectList(_context.Lecturers, "ID", "LecturerName");
+            ViewData["ModuleID"] = new SelectList(_context.Modules, "ID", "ModuleName");
             return View();
         }
 
@@ -188,8 +188,8 @@ namespace FaceAttendance.Controllers
             {
                 return NotFound();
             }
-            ViewData["LecturerID"] = new SelectList(_context.Lecturers, "ID", "ID", @class.LecturerID);
-            ViewData["ModuleID"] = new SelectList(_context.Modules, "ID", "ID", @class.ModuleID);
+            ViewData["LecturerID"] = new SelectList(_context.Lecturers, "ID", "LecturerName", @class.LecturerID);
+            ViewData["ModuleID"] = new SelectList(_context.Modules, "ID", "ModuleName", @class.ModuleID);
             return View(@class);
         }
 
