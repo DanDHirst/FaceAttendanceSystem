@@ -74,7 +74,7 @@ namespace FaceAttendance.Controllers
 
 
             //get all the clas ses on the module
-            List<Class> classes = await (from c in _context.Classes where c.ModuleID == id select c).ToListAsync();
+            List<Class> classes = await (from c in _context.Classes where c.ModuleID == id select c).OrderByDescending(s => s.StartDateTime).ToListAsync();
 
 
 

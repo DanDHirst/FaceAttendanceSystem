@@ -130,7 +130,7 @@ namespace FaceAttendance.Controllers
                 var totalClassesMissed = 0;
                 foreach (var m in modules)
                 {
-                    var cl = ((from c in _context.Classes where c.ModuleID == m.ID select c).ToList());
+                    var cl = ((from c in _context.Classes where c.ModuleID == m.ID select c).OrderByDescending(s => s.StartDateTime).ToList());
                     foreach(var cla in cl)
                     {
                         

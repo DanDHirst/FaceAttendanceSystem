@@ -84,12 +84,12 @@ namespace FaceAttendance.Controllers
             }
             //find classes that the lecturer has
             //sort them by upcoming and completed
-            var UpcomingClasses = (from c in _context.Classes where c.LecturerID == lecturer.ID && c.EndDateTime > DateTime.Now select c).ToList();
+            var UpcomingClasses = (from c in _context.Classes where c.LecturerID == lecturer.ID && c.EndDateTime > DateTime.Now select c).OrderBy(s => s.StartDateTime).ToList();
             foreach (var c in UpcomingClasses)
             {
                 c.Module = (from m in _context.Modules where m.ID == c.ModuleID select m).FirstOrDefault();
             }
-            var CompletedClasses = (from c in _context.Classes where c.LecturerID == lecturer.ID && c.EndDateTime < DateTime.Now select c).ToList();
+            var CompletedClasses = (from c in _context.Classes where c.LecturerID == lecturer.ID && c.EndDateTime < DateTime.Now select c).OrderByDescending(s => s.StartDateTime).ToList();
             foreach (var c in CompletedClasses)
             {
                 c.Module = (from m in _context.Modules where m.ID == c.ModuleID select m).FirstOrDefault();
