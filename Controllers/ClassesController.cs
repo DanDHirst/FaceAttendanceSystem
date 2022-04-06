@@ -114,14 +114,14 @@ namespace FaceAttendance.Controllers
         }
 
         // GET: Classes/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, string msg)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-
+            ViewData["Error"] = msg;
 
             //send data to the page
             var students = await GetStudentsAsync(id);
@@ -293,10 +293,11 @@ namespace FaceAttendance.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterID(int id,int studentID)
         {
+            string msg = "Student Not Found";
             var student = (from s in _context.Students where s.StudentCode == studentID select s).SingleOrDefault();
             if (student == null)
             {
-                return RedirectToAction(nameof(Details), new { id });
+                return RedirectToAction(nameof(Details), new { id,msg });
             }
 
             RegisteredStudent rs = new RegisteredStudent
@@ -309,11 +310,13 @@ namespace FaceAttendance.Controllers
             var checkReg = (from r in _context.RegisteredStudents where r.ClassID == rs.ClassID && r.StudentID == rs.StudentID select r).ToList();
             if (checkReg.Count > 0)
             {
-                return RedirectToAction(nameof(Details), new { id });
+                msg = "Student Already Regisitered";
+                return RedirectToAction(nameof(Details), new { id,msg });
             }
 
             _context.RegisteredStudents.Add(rs);
             await _context.SaveChangesAsync();
+            
 
             return RedirectToAction(nameof(Details) , new {id});
         }
