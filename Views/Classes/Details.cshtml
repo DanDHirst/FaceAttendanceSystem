@@ -37,14 +37,14 @@
             @Html.DisplayNameFor(model => model.Lecturer)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LecturerID)
-        </dd>
+            <a href="/Lecturers/Details/@Model.LecturerID">@Html.DisplayFor(model => model.Lecturer.LecturerName)</a>
+</dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Module)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ModuleID)
-        </dd>
+            <a href="/Modules/Details/@Model.ModuleID">@Html.DisplayFor(model => model.Module.ModuleName)</a>
+</dd>
     </dl>
 </div>
 @{

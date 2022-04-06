@@ -4,7 +4,7 @@
     ViewData["Title"] = "Module Details";
 }
 <partial name="_AdminAndLecturerPartial" />
-<h1>Details</h1>
+<h1>Module Details</h1>
 
 <div>
     <h4>Module</h4>
@@ -123,12 +123,12 @@
                         <td id="EndDate">
                             @Html.DisplayFor(modelItem => item.EndDateTime)
                         </td>
-                        <td id="LecturerID">
-                            @Html.DisplayFor(modelItem => item.LecturerID)
+                        <td id="Lecturer">
+                            <a href="/Lecturers/Details/@item.LecturerID"  >@Html.DisplayFor(modelItem => item.Lecturer.LecturerName)</a>
                         </td>
-                        <td id="LecturerID">
-                            @Html.DisplayFor(modelItem => item.ModuleID)
-                        </td>
+                        <td id="Module">
+                            <a href="/Modules/Details/@item.ModuleID">@Html.DisplayFor(modelItem => item.Module.ModuleName)</a>
+</td>
                         <td>
                             @{ var ClassDetails = "/Classes/Details/" + item.ID;
                             }

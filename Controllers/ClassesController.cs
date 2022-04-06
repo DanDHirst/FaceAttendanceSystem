@@ -139,6 +139,12 @@ namespace FaceAttendance.Controllers
             {
                 return NotFound();
             }
+            //populate the lecturer and modulde data
+
+
+            @class.Lecturer = (from l in _context.Lecturers where l.ID == @class.LecturerID select l).FirstOrDefault();
+            @class.Module = (from m in _context.Modules where m.ID == @class.ModuleID select m).FirstOrDefault();
+            
 
             return View(@class);
         }

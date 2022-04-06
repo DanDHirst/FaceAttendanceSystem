@@ -84,6 +84,14 @@ namespace FaceAttendance.Controllers
             {
                 return NotFound();
             }
+
+            //populate the lecturer and modulde data
+            foreach (var c in classes)
+            {
+                c.Lecturer = (from l in _context.Lecturers where l.ID == c.LecturerID select l).FirstOrDefault();
+                c.Module = (from m in _context.Modules where m.ID == c.ModuleID select m).FirstOrDefault();
+            }
+
             ViewData["Courses"] = courses;
             ViewData["Classes"] = classes;
             return View(@module);
