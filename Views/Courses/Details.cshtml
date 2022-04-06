@@ -186,5 +186,11 @@
 
 
 <div>
+    @if (userRole == "Admin")
+    {
+
+        <a asp-action="Edit" id="Edit" asp-route-id="@Model.ID" class="btn btn-info">Edit <i class="fa-solid fa-pen-to-square"></i></a>
+    } |
+
     <a asp-action="Index" id="Back">Back to List</a>
 </div>

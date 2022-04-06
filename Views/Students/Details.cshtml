@@ -1,9 +1,14 @@
 ﻿@model FaceAttendance.Models.Student
 
 @{
+    @using Microsoft.AspNetCore.Identity
+    @inject SignInManager<AppUser> SignInManager
+    @inject UserManager<AppUser> UserManager
+    var user = await UserManager.GetUserAsync(User);
+    var userRole = user?.UserRole;
     ViewData["Title"] = "Student Details";
 }
-    <partial name="_AdminAndLecturerPartial" />
+<partial name="_AdminAndLecturerPartial" />
 <h1>Student Details</h1>
 
 <div>
@@ -120,7 +125,7 @@
         </div>
     </div>
 
-    
+
     <div class="panel panel-info">
         <div class="panel-heading">
             <a data-toggle="collapse" href="#collapse2">
@@ -169,52 +174,57 @@
                     }
                 </tbody>
             </table>
-            </div>
         </div>
+    </div>
 
 
 
 
-            @*<table class="table">
-                    <thead>
-                        <tr>
-                            <th>
-                                Module name
-                            </th>
-                            <th>
-                                Class time
-                            </th>
-                            <th>
-                                room
-                            </th>
-                            <th>
-                                Time Registered
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Registered)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Class.Module.ModuleName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Class.StartDateTime)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Class.Room)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.RegisteredTime)
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>*@
-        </div>
-        <div>
-            <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-            <a asp-action="Index">Back to List</a>
-        </div>
+    @*<table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Module name
+                    </th>
+                    <th>
+                        Class time
+                    </th>
+                    <th>
+                        room
+                    </th>
+                    <th>
+                        Time Registered
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Registered)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Class.Module.ModuleName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Class.StartDateTime)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Class.Room)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RegisteredTime)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>*@
+</div>
+
+<div>
+    @if (userRole == "Admin")
+    {
+
+        <a asp-action="Edit" id="EditStudent" asp-route-id="@Model.ID" class="btn btn-info">Edit <i class="fa-solid fa-pen-to-square"></i></a> 
+    } | 
+    <a asp-action="Index">Back to List</a>
+</div>

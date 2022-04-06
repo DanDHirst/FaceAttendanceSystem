@@ -1,6 +1,11 @@
 ﻿@model FaceAttendance.Models.Module
 
 @{
+    @using Microsoft.AspNetCore.Identity
+    @inject SignInManager<AppUser> SignInManager
+    @inject UserManager<AppUser> UserManager
+    var user = await UserManager.GetUserAsync(User);
+    var userRole = user?.UserRole;
     ViewData["Title"] = "Module Details";
 }
 <partial name="_AdminAndLecturerPartial" />
@@ -124,7 +129,7 @@
                             @Html.DisplayFor(modelItem => item.EndDateTime)
                         </td>
                         <td id="Lecturer">
-                            <a href="/Lecturers/Details/@item.LecturerID"  >@Html.DisplayFor(modelItem => item.Lecturer.LecturerName)</a>
+                            <a href="/Lecturers/Details/@item.LecturerID">@Html.DisplayFor(modelItem => item.Lecturer.LecturerName)</a>
                         </td>
                         <td id="Module">
                             <a href="/Modules/Details/@item.ModuleID">@Html.DisplayFor(modelItem => item.Module.ModuleName)</a>
@@ -142,5 +147,11 @@
 </div>
 
 <div>
+    @if (userRole == "Admin")
+    {
+
+        <a asp-action="Edit" id="Edit" asp-route-id="@Model.ID" class="btn btn-info">Edit <i class="fa-solid fa-pen-to-square"></i></a>
+    } |
+
     <a asp-action="Index" id="Back">Back to List</a>
 </div>

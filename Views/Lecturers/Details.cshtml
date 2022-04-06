@@ -1,6 +1,11 @@
 ﻿@model FaceAttendance.Models.Lecturer
 
 @{
+    @using Microsoft.AspNetCore.Identity
+    @inject SignInManager<AppUser> SignInManager
+    @inject UserManager<AppUser> UserManager
+    var user = await UserManager.GetUserAsync(User);
+    var userRole = user?.UserRole;
     ViewData["Title"] = "Lecturer Details";
 }
 <partial name="_AdminAndLecturerPartial" />
@@ -77,7 +82,7 @@
                 }
             </tbody>
         </table>
-        </div>
+    </div>
 </div>
 
 <div class="panel panel-info">
@@ -129,6 +134,16 @@
                 }
             </tbody>
         </table>
-        </div>
     </div>
+</div>
+
+<div>
+    @if (userRole == "Admin")
+    {
+
+        <a asp-action="Edit" id="Edit" asp-route-id="@Model.ID" class="btn btn-info">Edit <i class="fa-solid fa-pen-to-square"></i></a>
+    } |
+
+    <a asp-action="Index">Back to List</a>
+</div>
 
