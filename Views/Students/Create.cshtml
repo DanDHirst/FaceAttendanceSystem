@@ -13,7 +13,7 @@
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="StudentCode" class="control-label"></label>
+                <label asp-for="StudentCode" class="control-label">Student ID</label>
                 <input asp-for="StudentCode" class="form-control" />
                 <span asp-validation-for="StudentCode" class="text-danger"></span>
             </div>
@@ -23,15 +23,16 @@
                 <span asp-validation-for="StudentName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="imageUrl" class="control-label"></label>
+                <label asp-for="imageUrl" class="control-label">Image Upload</label>
                 <span>Select File:</span>
                 <input type="file" name="postedFiles" asp-for="imageUrl" class="form-control" />
                 <span asp-validation-for="imageUrl" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="active" /> @Html.DisplayNameFor(model => model.active)
+                    Student Active
                 </label>
+                <input class="form-check-input" asp-for="active" />
             </div>
             <div class="form-group">
                 <input id="submit" type="submit" value="Create" class="btn btn-primary" />

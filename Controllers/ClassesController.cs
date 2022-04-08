@@ -154,6 +154,7 @@ namespace FaceAttendance.Controllers
         {
             ViewData["LecturerID"] = new SelectList(_context.Lecturers, "ID", "LecturerName");
             ViewData["ModuleID"] = new SelectList(_context.Modules, "ID", "ModuleName");
+            ViewData["Rooms"] = new SelectList(Constants.ROOMS, "", "","");
             return View();
         }
 
@@ -188,6 +189,7 @@ namespace FaceAttendance.Controllers
             {
                 return NotFound();
             }
+            ViewData["Rooms"] = new SelectList(Constants.ROOMS,"","",@class.Room);
             ViewData["LecturerID"] = new SelectList(_context.Lecturers, "ID", "LecturerName", @class.LecturerID);
             ViewData["ModuleID"] = new SelectList(_context.Modules, "ID", "ModuleName", @class.ModuleID);
             return View(@class);

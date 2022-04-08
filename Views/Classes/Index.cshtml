@@ -48,16 +48,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ClassCode)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Room)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StartDateTime)
+                Start Date Time
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EndDateTime)
+                End Date Time
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Lecturer)
@@ -72,9 +69,6 @@
         @foreach (var item in Model)
         {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClassCode)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Room)
             </td>
