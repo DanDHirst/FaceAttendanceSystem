@@ -14,7 +14,7 @@
 <h1>Classes</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-success">Create New Class <i class="fa-solid fa-plus"></i></a>
+    <a asp-action="Create" id="Create" class="btn btn-success">Create New Class <i class="fa-solid fa-plus"></i></a>
 
 </p>
 
@@ -69,13 +69,13 @@
         @foreach (var item in Model)
         {
         <tr>
-            <td>
+            <td id="room">
                 @Html.DisplayFor(modelItem => item.Room)
             </td>
-            <td>
+            <td id="startDateTime">
                 @Html.DisplayFor(modelItem => item.StartDateTime)
             </td>
-            <td>
+            <td id="EndDateTime">
                 @Html.DisplayFor(modelItem => item.EndDateTime)
             </td>
             <td id="Lecturer">
@@ -85,11 +85,11 @@
                 <a href="/Modules/Details/@item.ModuleID">@Html.DisplayFor(modelItem => item.Module.ModuleName)</a>
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-primary btn-sm">Manage/Register <i class="fa-solid fa-info"></i></a>
+                <a asp-action="Details" id="Details" asp-route-id="@item.ID" class="btn btn-primary btn-sm">Manage/Register <i class="fa-solid fa-info"></i></a>
                 @if (userRole == "Admin")
                 {
-                    <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-info btn-sm">Edit <i class="fa-solid fa-pen-to-square"></i></a>
-                    <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-danger btn-sm">Delete <i class="fa-solid fa-trash-can"></i></a>
+                    <a asp-action="Edit" id="Edit" asp-route-id="@item.ID" class="btn btn-info btn-sm">Edit <i class="fa-solid fa-pen-to-square"></i></a>
+                    <a asp-action="Delete" id="Delete" asp-route-id="@item.ID" class="btn btn-danger btn-sm">Delete <i class="fa-solid fa-trash-can"></i></a>
                     @*<a asp-action="Register" asp-route-id="@item.ID" class="btn btn-info btn-sm"> Register <i class="fa-solid fa-id-card"></i></a>*@
 
                 }
