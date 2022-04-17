@@ -28,21 +28,51 @@ namespace FaceAttendance.Controllers
 
 
         // GET: Students
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int currentPage,int prevPage, int nextPage)
         {
-            return View(await _context.Students.ToListAsync());
+            if(prevPage == -1 && currentPage > 0)
+            {
+                currentPage = currentPage - 1;
+            }
+            else if(nextPage == 1)
+            {
+                currentPage = currentPage +1;
+            }
+            ViewData["currentPage"] = currentPage;
+            return View(await _context.Students.Skip(currentPage * 10).Take(10).ToListAsync());
         }
         // post: search Students
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(int studentcode)
+        public async Task<IActionResult> Index(int studentcode, string studentname)
         {
-            if(studentcode == 0)
+            if (studentcode != 0) { 
+                ViewData["studentcode"] = studentcode;
+            }
+            ViewData["studentname"] = studentname;
+            if (studentcode == 0 && studentname == null)
             {
                 return View(await _context.Students.ToListAsync());
             }
-            var students = await (from s in _context.Students where s.StudentCode == studentcode select s).ToListAsync();
-            return View(students);
+            
+            if (studentcode != 0 && studentname != null)
+            {
+                var s1 = await (from s in _context.Students where s.StudentCode == studentcode && s.StudentName.Contains(studentname) select s).ToListAsync();
+                return View(s1);
+            }
+            if(studentcode != 0)
+            {
+                var students = await (from s in _context.Students where s.StudentCode == studentcode select s).ToListAsync();
+                return View(students);
+            }
+            if(studentname != null)
+            {
+                var students = await (from s in _context.Students where s.StudentName.Contains(studentname) select s).ToListAsync();
+                return View(students);
+            }
+            return View(await _context.Students.ToListAsync());
+
+
         }
 
 
@@ -100,7 +130,7 @@ namespace FaceAttendance.Controllers
                 var totalClassesMissed = 0;
                 foreach (var m in modules)
                 {
-                    var cl = ((from c in _context.Classes where c.ModuleID == m.ID select c).ToList());
+                    var cl = ((from c in _context.Classes where c.ModuleID == m.ID select c).OrderByDescending(s => s.StartDateTime).ToList());
                     foreach(var cla in cl)
                     {
                         

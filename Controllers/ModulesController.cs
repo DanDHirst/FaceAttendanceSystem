@@ -27,14 +27,30 @@ namespace FaceAttendance.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(string moduleCode)
+        public async Task<IActionResult> Index(string moduleCode, string moduleName)
         {
-            if (moduleCode == null || moduleCode == "")
+            ViewData["moduleName"] = moduleName;
+            ViewData["moduleCode"] = moduleCode;
+            if (moduleCode == null && moduleName == null)
             {
                 return View(await _context.Modules.ToListAsync());
             }
-            var modules = await (from m in _context.Modules where m.ModuleCode == moduleCode select m).ToListAsync();
-            return View(modules);
+            if (moduleCode != null && moduleName != null)
+            {
+                var Modules = await (from m in _context.Modules where m.ModuleCode.Contains(moduleCode) && m.ModuleName.Contains(moduleName) select m).ToListAsync();
+                return View(Modules);
+            }
+            if (moduleCode != null)
+            {
+                var Modules = await (from m in _context.Modules where m.ModuleCode.Contains( moduleCode) select m).ToListAsync();
+                return View(Modules);
+            }
+            if (moduleName != null)
+            {
+                var Modules = await (from m in _context.Modules where m.ModuleName.Contains(moduleName) select m).ToListAsync();
+                return View(Modules);
+            }
+            return View(await _context.Modules.ToListAsync());
         }
 
 
@@ -58,7 +74,7 @@ namespace FaceAttendance.Controllers
 
 
             //get all the clas ses on the module
-            List<Class> classes = await (from c in _context.Classes where c.ModuleID == id select c).ToListAsync();
+            List<Class> classes = await (from c in _context.Classes where c.ModuleID == id select c).OrderByDescending(s => s.StartDateTime).ToListAsync();
 
 
 
@@ -68,6 +84,14 @@ namespace FaceAttendance.Controllers
             {
                 return NotFound();
             }
+
+            //populate the lecturer and modulde data
+            foreach (var c in classes)
+            {
+                c.Lecturer = (from l in _context.Lecturers where l.ID == c.LecturerID select l).FirstOrDefault();
+                c.Module = (from m in _context.Modules where m.ID == c.ModuleID select m).FirstOrDefault();
+            }
+
             ViewData["Courses"] = courses;
             ViewData["Classes"] = classes;
             return View(@module);

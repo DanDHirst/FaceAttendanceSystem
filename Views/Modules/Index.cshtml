@@ -13,21 +13,42 @@
 <h1>Modules</h1>
 
 <p>
-    <a asp-action="Create" id="Create">Create New</a>
+    <a asp-action="Create" id="Create" class="btn btn-success">Create New Module <i class="fa-solid fa-plus"></i></a>
 </p>
-<form asp-action="Index">
-    <label for="SearchModuleCode" class="control-label">Search Module Code</label>
-    <input id="SearchModuleCode" name="ModuleCode" placeholder="Comp20" type="text">
-    <button>Search</button>
-</form>
+
+<div class="panel panel-info col-7">
+    <div class="panel-heading">
+        <a data-toggle="collapse" href="#collapse1">
+            <b>Search Modules </b> <i class="fa-solid fa-circle-chevron-down"></i>
+        </a>
+    </div>
+    <div class="panel-body panel-collapse collapse show" id="collapse1">
+        <form asp-action="Index">
+            <div class="col-7">
+                <label for="SearchModuleCode" class="control-label">Search Module Code</label>
+                <input id="SearchModuleCode" class="form-control" value="@ViewData["moduleCode"]" name="moduleCode" placeholder="Comp20" type="text">
+            </div>
+            <div class="col-7">
+                <label for="SearchModuleName" class="control-label">Search Module Name</label>
+                <input id="SearchModuleName" class="form-control" value="@ViewData["moduleName"]" name="moduleName" placeholder="Computing" type="text">
+            </div>
+            <div class="col-7">
+                <button class="btn btn-primary form-control">Search <i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ModuleName)
+                Module Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ModuleCode)
+                Module Code
             </th>
             <th></th>
         </tr>
@@ -43,14 +64,15 @@
                     @Html.DisplayFor(modelItem => item.ModuleCode)
                 </td>
                 <td>
+                    <a asp-action="Details" id="Details" asp-route-id="@item.ID" class="btn btn-primary">Details <i class="fa-solid fa-info"></i></a>
                     @if (userRole == "Admin")
                     {
 
 
-                        <a asp-action="Edit" id="Edit" asp-route-id="@item.ID">Edit</a>
-                        <a asp-action="Delete" id="Delete" asp-route-id="@item.ID">Delete</a>
+                        <a asp-action="Edit" id="Edit" asp-route-id="@item.ID" class="btn btn-info">Edit <i class="fa-solid fa-pen-to-square"></i></a>
+                        <a asp-action="Delete" id="Delete" asp-route-id="@item.ID" class="btn btn-danger">Delete <i class="fa-solid fa-trash-can"></i></a>
                     }
-                    <a asp-action="Details" id="Details" asp-route-id="@item.ID">Details</a>
+                    
                 </td>
             </tr>
         }

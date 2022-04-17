@@ -27,14 +27,36 @@ namespace FaceAttendance.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(int courseCode)
+        public async Task<IActionResult> Index(int courseCode,string courseName)
         {
-            if (courseCode == 0)
+
+            ViewData["courseName"] = courseName;
+            if (courseCode != 0)
+            {
+                ViewData["courseCode"] = courseCode;
+            }
+            
+            if (courseCode == 0 && courseName == null)
             {
                 return View(await _context.Courses.ToListAsync());
             }
-            var courses = await (from c in _context.Courses where c.CourseCode == courseCode select c).ToListAsync();
-            return View(courses);
+            if (courseCode != 0 && courseName != null)
+            {
+                var Courses = await (from m in _context.Courses where m.CourseCode == (courseCode) && m.CourseName.Contains(courseName) select m).ToListAsync();
+                return View(Courses);
+            }
+            if (courseCode != 0)
+            {
+                var Courses = await (from m in _context.Courses where m.CourseCode == (courseCode) select m).ToListAsync();
+                return View(Courses);
+            }
+            if (courseName != null)
+            {
+                var Courses = await (from m in _context.Courses where m.CourseName.Contains(courseName) select m).ToListAsync();
+                return View(Courses);
+            }
+            return View(await _context.Courses.ToListAsync());
+
         }
 
         // GET: Courses/Details/5

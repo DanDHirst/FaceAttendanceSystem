@@ -2,47 +2,51 @@
 
 @{
     ViewData["Title"] = "Create";
+    
+
+    Random rnd = new Random();
+    int num = rnd.Next();
+
+
 }
     <partial name="_AdminPartial" />
 
-<h1>Create</h1>
-
-<h4>Class</h4>
+<h1>Create Class</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label asp-for="ClassCode" class="control-label"></label>
-                <input asp-for="ClassCode" class="form-control" />
+                <input asp-for="ClassCode" class="form-control" value="@num"/>
                 <span asp-validation-for="ClassCode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ModuleID" class="control-label"></label>
+                <label asp-for="ModuleID" class="control-label">Module</label>
                 <select asp-for="ModuleID" class ="form-control" asp-items="ViewBag.ModuleID"></select>
             </div>
             <div class="form-group">
-                <label asp-for="LecturerID" class="control-label"></label>
+                <label asp-for="LecturerID" class="control-label">Lecturer</label>
                 <select asp-for="LecturerID" class ="form-control" asp-items="ViewBag.LecturerID"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Room" class="control-label"></label>
-                <input asp-for="Room" class="form-control" />
+                <select asp-for="Room" class="form-control" asp-items="ViewBag.Rooms"></select>
                 <span asp-validation-for="Room" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StartDateTime" class="control-label"></label>
+                <label asp-for="StartDateTime" class="control-label">Start Date Time</label>
                 <input asp-for="StartDateTime" class="form-control" />
                 <span asp-validation-for="StartDateTime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EndDateTime" class="control-label"></label>
+                <label asp-for="EndDateTime" class="control-label">End Date Time</label>
                 <input asp-for="EndDateTime" class="form-control" />
                 <span asp-validation-for="EndDateTime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input id="submit" type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>

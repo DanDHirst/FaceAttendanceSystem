@@ -7,27 +7,48 @@
 @{
     var user = await UserManager.GetUserAsync(User);
     var userRole = user?.UserRole;
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Lecturers";
 }
 <partial name="_AdminAndLecturerPartial" />
-<h1>Index</h1>
+<h1>Lecturers</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Create New Lecturer <i class="fa-solid fa-plus"></i></a>
 </p>
-<form asp-action="Index">
-    <label for="SearchLecturerCode" class="control-label">Search Lecturer Code</label>
-    <input id="SearchLecturerCode" name="lecturerCode" placeholder="12" type="number">
-    <button>Search</button>
-</form>
+
+
+<div class="panel panel-info col-7" >
+    <div class="panel-heading"> 
+    <a data-toggle="collapse"  href="#collapse1">
+        <b>Search Lecturers </b> <i class="fa-solid fa-circle-chevron-down"></i>
+    </a>
+    </div>
+    <div class="panel-body panel-collapse collapse show" id="collapse1"  >
+        <form asp-action="Index">
+            <div class="col-7">
+                <label for="SearchLecturerCode" class="control-label">Search Lecturer Code</label>
+                <input id="SearchLecturerCode" class="form-control" value="@ViewData["lecturerCode"]" name="lecturerCode" placeholder="12" type="number">
+            </div>
+            <div class="col-7">
+                <label for="SearchLecturerName" class="control-label">Search Lecturer Name</label>
+                <input id="SearchLecturerName" class="form-control" value="@ViewData["lecturerName"]" name="lecturerName" placeholder="Matt" type="text">
+            </div>
+            <div class="col-7">
+                <button class="btn btn-primary form-control">Search <i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.LecturerCode)
+                Lecturer Code
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LecturerName)
+                Lecturer Name
             </th>
             <th></th>
         </tr>
@@ -43,14 +64,15 @@
                     @Html.DisplayFor(modelItem => item.LecturerName)
                 </td>
                 <td>
+                    <a asp-action="Details" id="Details" asp-route-id="@item.ID" class="btn btn-primary">Details <i class="fa-solid fa-info"></i></a>
                     @if (userRole == "Admin")
                     {
 
 
-                    <a asp-action="Edit" id="Edit" asp-route-id="@item.ID">Edit</a> 
-                    <a asp-action="Delete" id="Delete" asp-route-id="@item.ID">Delete</a>
+                    <a asp-action="Edit" id="Edit" asp-route-id="@item.ID" class="btn btn-info">Edit <i class="fa-solid fa-pen-to-square"></i></a>
+                    <a asp-action="Delete" id="Delete" asp-route-id="@item.ID" class="btn btn-danger">Delete <i class="fa-solid fa-trash-can"></i></a>
                     }
-                    <a asp-action="Details" id="Details" asp-route-id="@item.ID">Details</a>
+                    
                 </td>
             </tr>
         }

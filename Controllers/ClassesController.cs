@@ -25,18 +25,66 @@ namespace FaceAttendance.Controllers
             _context = context;
             Environment = _environment;
         }
-
-        // GET: Classes
-        public async Task<IActionResult> Index()
+        public List<Class> AddLecturersAndModules( List<Class> classes)
         {
-            
-            var courses = await _context.Classes.ToListAsync();
-            foreach(var c in courses)
+            foreach (var c in classes)
             {
                 c.Lecturer = (from l in _context.Lecturers where c.LecturerID == l.ID select l).First();
                 c.Module = (from m in _context.Modules where m.ID == c.ModuleID select m).First();
             }
-            return View(courses);
+            return classes;
+        }
+
+        // GET: Classes
+
+        public async Task<IActionResult> Index()
+        {
+            
+            var courses = await _context.Classes.ToListAsync();
+            var classes = AddLecturersAndModules(courses);
+            return View(classes);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(string room, DateTime startTime)
+        {
+            
+            ViewData["room"] = room;
+            ViewData["startTime"] = startTime;
+
+            if(room == null && startTime.Year == 0001)
+            {
+                var course = await _context.Classes.ToListAsync();
+                var classes = AddLecturersAndModules(course);
+                return View(classes);
+            }
+
+            if (room != null && startTime.Year == 0001 )
+            {
+                var cl = await (from c in _context.Classes where c.Room == room select c).ToListAsync();
+                var classes = AddLecturersAndModules(cl);
+                return View(classes);
+            }
+            
+            if (room != null && startTime.Year != 0001)
+            {
+                var cl = await (from c in _context.Classes where c.Room == room && c.StartDateTime > startTime select c).ToListAsync();
+                var classes = AddLecturersAndModules(cl);
+                return View(classes);
+            }
+            if (room == null && startTime.Year != 0001)
+            {
+                var cl = await (from c in _context.Classes where  c.StartDateTime > startTime select c).ToListAsync();
+                var classes = AddLecturersAndModules(cl);
+                return View(classes);
+            }
+
+            var courses = await _context.Classes.ToListAsync();
+            var cla = AddLecturersAndModules(courses);
+            return View(cla);
+
+
+
         }
         public async Task<List<Student>> GetStudentsAsync(int? id)
         {
@@ -66,14 +114,14 @@ namespace FaceAttendance.Controllers
         }
 
         // GET: Classes/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, string msg)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-
+            ViewData["Error"] = msg;
 
             //send data to the page
             var students = await GetStudentsAsync(id);
@@ -91,6 +139,12 @@ namespace FaceAttendance.Controllers
             {
                 return NotFound();
             }
+            //populate the lecturer and modulde data
+
+
+            @class.Lecturer = (from l in _context.Lecturers where l.ID == @class.LecturerID select l).FirstOrDefault();
+            @class.Module = (from m in _context.Modules where m.ID == @class.ModuleID select m).FirstOrDefault();
+            
 
             return View(@class);
         }
@@ -98,8 +152,9 @@ namespace FaceAttendance.Controllers
         // GET: Classes/Create
         public IActionResult Create()
         {
-            ViewData["LecturerID"] = new SelectList(_context.Lecturers, "ID", "ID");
-            ViewData["ModuleID"] = new SelectList(_context.Modules, "ID", "ID");
+            ViewData["LecturerID"] = new SelectList(_context.Lecturers, "ID", "LecturerName");
+            ViewData["ModuleID"] = new SelectList(_context.Modules, "ID", "ModuleName");
+            ViewData["Rooms"] = new SelectList(Constants.ROOMS, "", "","");
             return View();
         }
 
@@ -134,8 +189,9 @@ namespace FaceAttendance.Controllers
             {
                 return NotFound();
             }
-            ViewData["LecturerID"] = new SelectList(_context.Lecturers, "ID", "ID", @class.LecturerID);
-            ViewData["ModuleID"] = new SelectList(_context.Modules, "ID", "ID", @class.ModuleID);
+            ViewData["Rooms"] = new SelectList(Constants.ROOMS,"","",@class.Room);
+            ViewData["LecturerID"] = new SelectList(_context.Lecturers, "ID", "LecturerName", @class.LecturerID);
+            ViewData["ModuleID"] = new SelectList(_context.Modules, "ID", "ModuleName", @class.ModuleID);
             return View(@class);
         }
 
@@ -239,10 +295,11 @@ namespace FaceAttendance.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterID(int id,int studentID)
         {
+            string msg = "Student Not Found";
             var student = (from s in _context.Students where s.StudentCode == studentID select s).SingleOrDefault();
             if (student == null)
             {
-                return RedirectToAction(nameof(Details), new { id });
+                return RedirectToAction(nameof(Details), new { id,msg });
             }
 
             RegisteredStudent rs = new RegisteredStudent
@@ -255,11 +312,13 @@ namespace FaceAttendance.Controllers
             var checkReg = (from r in _context.RegisteredStudents where r.ClassID == rs.ClassID && r.StudentID == rs.StudentID select r).ToList();
             if (checkReg.Count > 0)
             {
-                return RedirectToAction(nameof(Details), new { id });
+                msg = "Student Already Regisitered";
+                return RedirectToAction(nameof(Details), new { id,msg });
             }
 
             _context.RegisteredStudents.Add(rs);
             await _context.SaveChangesAsync();
+            
 
             return RedirectToAction(nameof(Details) , new {id});
         }

@@ -2,17 +2,33 @@
     ViewData["Title"] = "Home Page";
 }
 <div class="row">
-    <div class="col-lg-4"><button class="btn btn-primary btn-lg" style="width: 200px; height: 200px;" type="submit">Students</button></div>
-    <div class="col-lg-4"><button class="btn btn-primary btn-lg" style="width: 200px; height: 200px;" type="submit">Modules</button></div>
-    <div class="col-lg-4"><button class="btn btn-primary btn-lg" style="width: 200px; height: 200px;" type="submit">Courses</button></div>
+    <div class="col-lg-4"><button onclick="window.location.href='/Students'" class="btn btn-primary btn-lg" style="width: 200px; height: 200px;" type="submit">Students</button></div>
+    <div class="col-lg-4"><button onclick="window.location.href='/Modules'" class="btn btn-primary btn-lg" style="width: 200px; height: 200px;" type="submit">Modules</button></div>
+    <div class="col-lg-4"><button onclick="window.location.href='/Courses'" class="btn btn-primary btn-lg" style="width: 200px; height: 200px;" type="submit">Courses</button></div>
 </div>
 <div class="row">
-    <div class="col-lg-4"></div>
-    <div class="col-lg-4"></div>
-    <div class="col-lg-4"></div>
+    <div class="col-lg-4"><br></div>
+    <div class="col-lg-4"><br></div>
+    <div class="col-lg-4"><br></div>
 </div>
 <div class="row">
-    <div class="col-lg-4"><button class="btn btn-primary btn-lg" style="width: 200px; height: 200px;" type="submit">Classes</button></div>
-    <div class="col-lg-4"><button class="btn btn-primary btn-lg" style="width: 200px; height: 200px;" type="submit">Lecturers</button></div>
-    <div class="col-lg-4"><button class="btn btn-primary btn-lg" style="width: 200px; height: 200px;" type="submit">Accounts</button></div>
+    <div class="col-lg-4"><button onclick="window.location.href='/Classes'" class="btn btn-primary btn-lg" style="width: 200px; height: 200px;" type="submit">Classes</button></div>
+    <div class="col-lg-4"><button onclick="window.location.href='/Lecturers'" class="btn btn-primary btn-lg" style="width: 200px; height: 200px;" type="submit">Lecturers</button></div>
+    @{
+
+        @using Microsoft.AspNetCore.Identity
+        @inject SignInManager<AppUser> SignInManager
+        @inject UserManager<AppUser> UserManager
+        var user = await UserManager.GetUserAsync(User);
+        var userRole = user?.UserRole;
+        if (userRole != "Admin")
+        {
+            <div class="col-lg-4"><button onclick="window.location.href='/Lecturers/dashboard'" class="btn btn-primary btn-lg" style="width: 200px; height: 200px;" type="submit">Dashboard</button></div>
+        }
+        else
+        {
+            <div class="col-lg-4"><button onclick="window.location.href='/AppUser'" class="btn btn-primary btn-lg" style="width: 200px; height: 200px;" type="submit">Accounts</button></div>
+        }
+    }
+    
 </div>

@@ -1,13 +1,17 @@
 ﻿@model FaceAttendance.Models.Student
 
 @{
+    @using Microsoft.AspNetCore.Identity
+    @inject SignInManager<AppUser> SignInManager
+    @inject UserManager<AppUser> UserManager
+    var user = await UserManager.GetUserAsync(User);
+    var userRole = user?.UserRole;
     ViewData["Title"] = "Student Details";
 }
-    <partial name="_AdminAndLecturerPartial" />
-<h1>Details</h1>
+<partial name="_AdminAndLecturerPartial" />
+<h1>Student Details</h1>
 
 <div>
-    <h4>Student</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -41,12 +45,12 @@
             var classesAttended = (List<Class>)ViewData["classesAttended"];
             int totalClassesMissed = (int)ViewData["totalClassesMissed"];
             int totalClasses = (int)ViewData["totalClasses"];
-            
 
-            var percentage =ViewData["percentage"];
-            
 
-            
+            var percentage = ViewData["percentage"];
+
+
+
 
 
         }
@@ -69,125 +73,158 @@
         }
 
     </dl>
-    <h1> Classes Missed</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Module name
-                </th>
-                <th>
-                    Class time
-                </th>
-                <th>
-                    room
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (classesMissed != null)
-            {
-            @foreach (var item in classesMissed)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Module.ModuleName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.StartDateTime) - @Html.DisplayFor(modelItem => item.EndDateTime)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Room)
-                    </td>
 
-                </tr>
-            }
-            }
-        </tbody>
-    </table>
-
-    <h1> Classes Attended</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Module name
-                </th>
-                <th>
-                    Class time
-                </th>
-                <th>
-                    room
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (classesAttended != null)
-            {
-                @foreach (var item in classesAttended)
-                {
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <a data-toggle="collapse" href="#collapse1">
+                <h3> Classes Missed</h3> <i class="fa-solid fa-circle-chevron-down"></i>
+            </a>
+        </div>
+        <div class="panel-body panel-collapse collapse show" id="collapse1">
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Module.ModuleName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.StartDateTime) - @Html.DisplayFor(modelItem => item.EndDateTime)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Room)
-                        </td>
-
+                        <th>
+                            Module name
+                        </th>
+                        <th>
+                            Class time
+                        </th>
+                        <th>
+                            room
+                        </th>
+                        <th></th>
                     </tr>
-                }
-            }
-            </tbody>
-    </table>
+                </thead>
+                <tbody>
+                    @if (classesMissed != null)
+                    {
+                        @foreach (var item in classesMissed)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Module.ModuleName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.StartDateTime) - @Html.DisplayFor(modelItem => item.EndDateTime)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Room)
+                                </td>
+                                <td>
+                                    @{ var ClassDetails = "/Classes/Details/" + item.ID;
+                                    }
+                                    <a href=@ClassDetails id="ClassDetails" class="btn btn-primary">Details <i class="fa-solid fa-info"></i></a>
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <a data-toggle="collapse" href="#collapse2">
+                <h3> Classes Attended</h3> <i class="fa-solid fa-circle-chevron-down"></i>
+            </a>
+        </div>
+        <div class="panel-body panel-collapse collapse show" id="collapse2">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Module name
+                        </th>
+                        <th>
+                            Class time
+                        </th>
+                        <th>
+                            room
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (classesAttended != null)
+                    {
+                        @foreach (var item in classesAttended)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Module.ModuleName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.StartDateTime) - @Html.DisplayFor(modelItem => item.EndDateTime)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Room)
+                                </td>
+                                <td>
+                                    @{ var ClassDetails = "/Classes/Details/" + item.ID;
+                                    }
+                                    <a href=@ClassDetails id="ClassDetails" class="btn btn-primary">Details <i class="fa-solid fa-info"></i></a>
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 
 
 
     @*<table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Module name
-                </th>
-                <th>
-                    Class time
-                </th>
-                <th>
-                    room
-                </th>
-                <th>
-                    Time Registered
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Registered)
-            {
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Class.Module.ModuleName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Class.StartDateTime)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Class.Room)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RegisteredTime)
-                    </td>
+                    <th>
+                        Module name
+                    </th>
+                    <th>
+                        Class time
+                    </th>
+                    <th>
+                        room
+                    </th>
+                    <th>
+                        Time Registered
+                    </th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>*@
+            </thead>
+            <tbody>
+                @foreach (var item in Registered)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Class.Module.ModuleName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Class.StartDateTime)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Class.Room)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RegisteredTime)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>*@
 </div>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    @if (userRole == "Admin")
+    {
+
+        <a asp-action="Edit" id="EditStudent" asp-route-id="@Model.ID" class="btn btn-info">Edit <i class="fa-solid fa-pen-to-square"></i></a> 
+    } | 
     <a asp-action="Index">Back to List</a>
 </div>

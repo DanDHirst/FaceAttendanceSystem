@@ -7,36 +7,69 @@
 @{
     var user = await UserManager.GetUserAsync(User);
     var userRole = user?.UserRole;
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Students";
 }
 <partial name="_AdminAndLecturerPartial" />
 <h1>Students</h1>
 
 <p>
-    <a asp-action="Create" id="CreateStudent">Create New Student</a>
+    <a asp-action="Create" id="CreateStudent" class="btn btn-success">Create New Student <i class="fa-solid fa-plus"></i></a>
 </p>
-<form asp-action="Index">
-    <label for="SearchStudentCode" class="control-label">Search Student Code</label>
-    <input id="SearchStudentCode" name="studentcode" placeholder="1232" type="number">
-    <button>Search</button>
-</form>
+
+
+<div class="panel panel-info col-7">
+    <div class="panel-heading">
+        <a data-toggle="collapse" href="#collapse1">
+            <b>Search Students </b> <i class="fa-solid fa-circle-chevron-down"></i>
+        </a>
+    </div>
+    <div class="panel-body panel-collapse collapse show" id="collapse1">
+        <form asp-action="Index">
+            <div class="col-7">
+                <label for="SearchStudentCode" class="control-label">Search Student Code</label>
+                <input id="SearchStudentCode" class="form-control" value="@ViewData["studentcode"]" name="studentcode" placeholder="1232" type="number">
+            </div>
+            <div class="col-7">
+                <label for="SearchStudentName" class="control-label">Search Student Name</label>
+                <input id="SearchStudentName" class="form-control" value="@ViewData["studentname"]" name="studentname" placeholder="Steve" type="text">
+            </div>
+            <div class="col-7">
+                <button class="btn btn-primary form-control">Search <i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+
+        </form>
+    </div>
+</div>
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.StudentCode)
+                Student ID
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StudentName)
+                Student Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.imageUrl)
+                Image
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.active)
             </th>
-            <th></th>
+            <th>
+                <div class="form-inline" style="float: right">
+                <form method="get" class="form-inline">
+                    <button name="prevPage" class="btn btn-primary" value="-1"><</button>
+                    <input value="@ViewData["currentPage"]"   name="currentPage" hidden>
+                </form>
+                <h3 class="form-inline">&nbsp;&nbsp;  @ViewData["currentPage"] &nbsp;&nbsp; </h3>
+                
+                <form method="get" class="form-inline">
+                    <input value="@ViewData["currentPage"]" name="currentPage" hidden>
+                    <button name="nextPage"  class="btn btn-primary"  value="1">></button>
+                </form>
+                </div>
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -58,15 +91,16 @@
                 </td>
                 <td id="StudentManagement">
 
-
+                    <a asp-action="Details" id="ViewStudent" asp-route-id="@item.ID" class="btn btn-primary">Details<i class="fa-solid fa-info"></i></a>
                     @if (userRole == "Admin")
                     {
 
 
-                        <a asp-action="Edit" id="EditStudent" asp-route-id="@item.ID">Edit</a>
-                        <a asp-action="Delete" id="DeleteStudent" asp-route-id="@item.ID">Delete</a>
+                        <a asp-action="Edit" id="EditStudent" asp-route-id="@item.ID" class="btn btn-info">Edit <i class="fa-solid fa-pen-to-square"></i></a>
+
+                        <a  asp-action="Delete" id="DeleteStudent" asp-route-id="@item.ID" class="btn btn-danger">Delete <i class="fa-solid fa-trash-can"></i></a>
                     }
-                    <a asp-action="Details" id="ViewStudent" asp-route-id="@item.ID">Details</a>
+
                 </td>
             </tr>
         }
