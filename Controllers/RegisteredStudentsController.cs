@@ -138,10 +138,17 @@ namespace FaceAttendance.Controllers
             const string SUBSCRIPTION_KEY = Constants.SUBSCRIPTION_KEY;
             const string ENDPOINT = Constants.ENDPOINT;
             const string RECOGNITION_MODEL3 = RecognitionModel.Recognition03;
-            var currentTime = DateTime.Now.AddMinutes(-15);
+            var currentTime = DateTime.Now.AddHours(1);
             
             //find class from room 
-            var Class = (from c in _context.Classes let startTime = (c.StartDateTime.AddMinutes(-15)) where c.Room == room && startTime < currentTime && (c.EndDateTime) > currentTime select c).Single();
+            var Class = (from c in _context.Classes let startTime = (c.StartDateTime.AddMinutes(-15)) where c.Room == room && startTime < currentTime && (c.EndDateTime) > currentTime select c).FirstOrDefault();
+            if(Class == null)
+            {
+                ImageDetails matchedImages = new ImageDetails();
+                matchedImages.notFound = true;
+                System.IO.File.Delete(("./wwwroot/image/" + filename));
+                return matchedImages;
+            }
             //remove when python upload is created
             //BlobStorage.UploadAFile("newimage", filename);
             
