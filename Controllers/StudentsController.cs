@@ -118,7 +118,7 @@ namespace FaceAttendance.Controllers
             ViewData["percentage"] = 0;
             if ( course.Count > 0)
             {
-                var modlist = (from m in _context.ModuleLists where course[0].ID == m.CourseID select m).ToList();
+                var modlist = (from m in _context.ModuleLists where course[0].CourseID == m.CourseID select m).ToList();
                 List<Module> modules = new List<Module>();
                 foreach (var m in modlist)
                 {
@@ -134,10 +134,10 @@ namespace FaceAttendance.Controllers
                     foreach(var cla in cl)
                     {
                         
-                        if(cla.EndDateTime < DateTime.Now){
+                        
                             cla.Module = (from mods in _context.Modules where mods.ID == cla.ModuleID select mods).SingleOrDefault();
                             var registered = (from r in _context.RegisteredStudents where r.StudentID == id && r.ClassID == cla.ID select r).ToList();
-                            if(registered.Count < 1)
+                            if(registered.Count < 1 & cla.EndDateTime < DateTime.Now)
                             {
                                 totalClassesMissed += 1;
                                 classesMissed.Add(cla);
@@ -146,8 +146,8 @@ namespace FaceAttendance.Controllers
                             {
                                 classesAttended.Add(cla);
                             }
-                            
-                        }
+                           
+                        
                     }
                 }
                 ViewData["classesMissed"] = classesMissed;
@@ -163,13 +163,6 @@ namespace FaceAttendance.Controllers
                 
                 percentage = percentage *100;
                 ViewData["percentage"] = percentage;
-
-
-
-
-
-
-
 
             }
 
