@@ -144,7 +144,10 @@ namespace FaceAttendance.Controllers
                             }
                             else
                             {
+                            if (registered.Count >= 1)
+                            {
                                 classesAttended.Add(cla);
+                            }
                             }
                            
                         
