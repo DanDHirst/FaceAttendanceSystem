@@ -6,6 +6,13 @@ https://youtu.be/vegAmCOJBgw
 
 ![Screenshot of students](image.png "students")
 
+## Features
+- Register students to classes
+- Staff can view students class attendance
+- View Details of students who have attended classes(for tracking)
+- Personalised dashboard for each lecturer
+- Students divided into courses
+
 ## Technologies used
 - Azure face AI
 - ASP.net Core 3.1
